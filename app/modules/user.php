@@ -4,6 +4,9 @@ function authenticate()
 {
     return [
         'message' => 'success',
-        'user_id' => 1
+        'data' => [
+            'user_id' => 1,
+            'token' => 'XZXWAWRTERSCCZZSsswSASWSA'
+        ]
     ];
 }

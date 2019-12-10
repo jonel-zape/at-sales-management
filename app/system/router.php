@@ -42,7 +42,6 @@ function route()
 
     $function = is_null($function) ? 'index' : $function;
 
-    $response = [];
     if (isset($routes[$url])) {
         $route = $routes[$url];
 
@@ -53,7 +52,10 @@ function route()
             exit;
         }
 
-        $response = call_user_func($function, $value1, $value2);
+        $module = call_user_func($function, $value1, $value2);
+        if ($route['request_type'] == REQUEST_JSON) {
+            jsonResponse($module['data'], $module['message']);
+        }
     } else {
         renderNotFound();
     }
@@ -63,5 +65,20 @@ function renderNotFound()
 {
     httpResonseNotFound();
     require getPagesPath().'404.php';
+    exit;
+}
+
+function jsonResponse($data, $message)
+{
+    global $responseCode;
+
+    $response = [
+        'code' => $responseCode,
+        'message' => $message,
+        'data' => $data
+    ];
+
+    header('Content-Type: application/json');
+    echo json_encode($response);
     exit;
 }
