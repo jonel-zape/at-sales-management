@@ -1,6 +1,9 @@
 <?php
 
-function index()
+class Home
 {
-    echo 'home';
+    public function index()
+    {
+        echo 'home';
+    }
 }

@@ -12,7 +12,7 @@ function defaultRoute($module, $requestType, $validateAuth = true)
     global $routes;
 
     $routes['index.php'] = [
-        'module' => $module.'.php',
+        'module' => $module,
         'request_type' => $requestType,
         'validate_auth' => $validateAuth
     ];
@@ -23,7 +23,7 @@ function addRoute($url, $module, $requestType, $validateAuth = true)
     global $routes;
 
     $routes[$url] = [
-        'module' => $module.'.php',
+        'module' => $module,
         'request_type' => $requestType,
         'validate_auth' => $validateAuth
     ];
@@ -56,14 +56,26 @@ function route()
     if (isset($routes[$url])) {
         $route = $routes[$url];
 
-        require getModulesPath().$route['module'];
+        require getModulesPath().$route['module'].'.php';
 
-        if (!function_exists($function)) {
+        $class = ucfirst($route['module']);
+        $object = new $class();
+
+        if (! method_exists($object, $function)) {
             renderNotFound();
             exit;
         }
 
-        $module = call_user_func($function, $value1, $value2);
+        if ($route['request_type'] == REQUEST_PAGE) {
+            pageHeader();
+        }
+
+        $module = call_user_func(array($object, $function), $value1, $value2);
+
+        if ($route['request_type'] == REQUEST_PAGE) {
+            pageFooter();
+        }
+
         if ($route['request_type'] == REQUEST_JSON) {
             jsonResponse($module['data'], $module['message']);
         }
