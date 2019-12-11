@@ -7,6 +7,17 @@ require 'helpers.php';
 
 $routes = [];
 
+function defaultRoute($module, $requestType, $validateAuth = true)
+{
+    global $routes;
+
+    $routes['index.php'] = [
+        'module' => $module.'.php',
+        'request_type' => $requestType,
+        'validate_auth' => $validateAuth
+    ];
+}
+
 function addRoute($url, $module, $requestType, $validateAuth = true)
 {
     global $routes;
