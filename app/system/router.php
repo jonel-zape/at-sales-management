@@ -78,7 +78,7 @@ function route()
         }
 
         if ($route['request_type'] == REQUEST_JSON) {
-            jsonResponse($module['data'], $module['message']);
+            renderJsonResponse($module['data'], $module['message']);
         }
     } else {
         renderNotFound();
@@ -92,7 +92,23 @@ function renderNotFound()
     exit;
 }
 
-function jsonResponse($data, $message)
+function jsonResponse($data, $message = null, $terminate = false)
+{
+    if (is_null($message)) {
+        $message = getHttpResponseMessage();
+    }
+
+    if ($terminate) {
+        renderJsonResponse($data, $message);
+    }
+
+    return [
+        'message' => $message,
+        'data' => $data
+    ];
+}
+
+function renderJsonResponse($data, $message)
 {
     $response = [
         'code' => getHttpResponseCode(),

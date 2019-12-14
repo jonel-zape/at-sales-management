@@ -3,10 +3,10 @@
 function getDatabaseConfig()
 {
     return [
-        'host'     => '',
-        'user'     => '',
-        'password' => '',
-        'database' => ''
+        'host'     => '127.0.0.1',
+        'user'     => 'root',
+        'password' => '121586',
+        'database' => 'atsm'
     ];
 }
 
