@@ -4,6 +4,7 @@ require 'config.php';
 require 'const.php';
 require 'auth.php';
 require 'helpers.php';
+require 'database.php';
 
 $routes = [];
 
@@ -93,10 +94,8 @@ function renderNotFound()
 
 function jsonResponse($data, $message)
 {
-    global $responseCode;
-
     $response = [
-        'code' => $responseCode,
+        'code' => getHttpResponseCode(),
         'message' => $message,
         'data' => $data
     ];
