@@ -1,4 +1,7 @@
 RewriteEngine On
+
+RewriteRule ^(css|fonts|jqvmap|js)($|/) - [L]
+
 RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

@@ -57,3 +57,8 @@ function httpResonseServiceUnavailable()
     $responseCode = setHttpResponseCode(503, 'Service Unavailable');
     http_response_code($responseCode);
 }
+
+function renderView($path)
+{
+    require getPagesPath().'/'.$path;
+}
