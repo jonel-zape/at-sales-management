@@ -68,6 +68,10 @@ function route()
         }
 
         if ($route['request_type'] == REQUEST_PAGE) {
+            if ($route['validate_auth'] && !isAuthenticated()) {
+                routeTo('/sign-in');
+            }
+
             pageHeader();
         }
 
@@ -81,7 +85,9 @@ function route()
             respondAndTerminate($moduleResponse);
         }
     } else {
+        pageHeader();
         renderNotFound();
+        pageFooter();
     }
 }
 
@@ -96,7 +102,6 @@ function renderNotFound()
 {
     httpResonseNotFound();
     require getPagesPath().'404.php';
-    exit;
 }
 
 function jsonResponse($data, $terminate = false)

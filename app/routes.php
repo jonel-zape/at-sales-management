@@ -1,7 +1,9 @@
 <?php
 
-defaultRoute( 'home', REQUEST_PAGE);
+defaultRoute('auth', REQUEST_PAGE);
 
 addRoute('sign-in', 'auth', REQUEST_PAGE, EXCLUDE_AUTH);
+
+addRoute('home', 'home', REQUEST_PAGE);
 
 addRoute('user/all', 'user', REQUEST_JSON);

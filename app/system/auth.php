@@ -1,6 +1,6 @@
 <?php
 
-function auth()
+function isAuthenticated()
 {
-    return true;
+    return false;
 }

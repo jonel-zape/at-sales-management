@@ -83,3 +83,9 @@ function view($path)
 {
     require getPagesPath().'/'.$path;
 }
+
+function routeTo($location)
+{
+    header('location: '.$location);
+    exit;
+}

@@ -5,7 +5,13 @@
         </div>
     </div>
     <div class="template-page-wrapper">
-        <form class="form-horizontal templatemo-signin-form" role="form" action="index.html" method="get">
+        <div class="form-horizontal templatemo-signin-form" role="form">
+            <div class="form-group">
+                <div class="col-md-12">
+                  <div class="templatemo-alerts" id="alert-container">
+                  </div>
+                </div>
+            </div>
             <div class="form-group">
                 <div class="col-md-12">
                     <label for="username" class="col-sm-2 control-label">Username</label>
@@ -25,7 +31,7 @@
             <div class="form-group">
                 <div class="col-md-12">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <input type="submit" value="Sign in" class="btn btn-default">
+                        <input type="submit" value="Sign in" class="btn btn-default" onclick="auth.login()">
                     </div>
                 </div>
             </div>
@@ -33,3 +39,4 @@
     </div>
 </div>
 
+<script src="/js/modules/auth.js"></script>
