@@ -12,8 +12,7 @@ function databaseConnect()
     $connection = @mysqli_connect($host, $user, $password, $database);
 
     if (!$connection) {
-        httpResonseServiceUnavailable();
-        jsonResponse('Database connection error.', null,  TERMINATE_REQUEST);
+        respondAndTerminate(errorResponse(['Database connection error.'], HTTP_SERVICE_UNAVAILABLE));
     }
 
     return $connection;
@@ -31,8 +30,7 @@ function getData($sql)
             'command' => $sql
         ];
 
-        httpResonseUnprocessable();
-        jsonResponse($details, null,  TERMINATE_REQUEST);
+        respondAndTerminate(errorResponse($details, HTTP_UNPROCESSABLE));
     }
 
     $resultSet = mysqli_fetch_all($result, MYSQLI_ASSOC);

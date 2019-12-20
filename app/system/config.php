@@ -5,7 +5,7 @@ function getDatabaseConfig()
     return [
         'host'     => '127.0.0.1',
         'user'     => 'root',
-        'password' => '121586',
+        'password' => '123456',
         'database' => 'atsm'
     ];
 }

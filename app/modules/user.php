@@ -4,9 +4,7 @@ class User
 {
     public function authenticate()
     {
-        httpResonseSuccess();
-
-        return jsonResponse([
+        return successfulResponse([
             'user_id' => 1,
             'token' => 'XZXWAWRTERSCCZZSsswSASWSA'
         ]);
@@ -15,8 +13,6 @@ class User
     public function all()
     {
         $users = getData('SELECT `id`, `username` FROM `user` WHERE `deleted_at` IS NULL');
-
-        httpResonseSuccess();
-        return jsonResponse($users);
+        return successfulResponse($users);
     }
 }

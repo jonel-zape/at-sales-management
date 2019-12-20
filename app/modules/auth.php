@@ -4,6 +4,6 @@ class Auth
 {
     public function index()
     {
-        renderView('sign-in.php');
+        view('sign-in.php');
     }
 }

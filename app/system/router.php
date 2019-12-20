@@ -71,18 +71,25 @@ function route()
             pageHeader();
         }
 
-        $module = call_user_func(array($object, $function), $value1, $value2);
+        $moduleResponse = call_user_func(array($object, $function), $value1, $value2);
 
         if ($route['request_type'] == REQUEST_PAGE) {
             pageFooter();
         }
 
         if ($route['request_type'] == REQUEST_JSON) {
-            renderJsonResponse($module['data'], $module['message']);
+            respondAndTerminate($moduleResponse);
         }
     } else {
         renderNotFound();
     }
+}
+
+function respondAndTerminate($response)
+{
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit;
 }
 
 function renderNotFound()
@@ -92,31 +99,42 @@ function renderNotFound()
     exit;
 }
 
-function jsonResponse($data, $message = null, $terminate = false)
+function jsonResponse($data, $terminate = false)
 {
-    if (is_null($message)) {
-        $message = getHttpResponseMessage();
-    }
-
     if ($terminate) {
-        renderJsonResponse($data, $message);
+        renderJsonResponse($data);
     }
 
-    return [
-        'message' => $message,
-        'data' => $data
-    ];
+    return $data;
 }
 
-function renderJsonResponse($data, $message)
+function formatResponse($data, $message = null, $errors = [], $action = '')
 {
-    $response = [
+    $formatted = [
         'code' => getHttpResponseCode(),
         'message' => $message,
-        'data' => $data
+        'errors' => $errors,
+        'action' => $action,
+        'values' => $data
     ];
 
-    header('Content-Type: application/json');
-    echo json_encode($response);
-    exit;
+    return $formatted;
+}
+
+// For Modules
+function successfulResponse($data, $action = '')
+{
+    httpResonseSuccess();
+    return formatResponse($data, getHttpResponseMessage(), [], $action);
+}
+
+function errorResponse($errors, $code = null, $action = '')
+{
+    if (is_null($code)) {
+        httpResonseUnprocessable();
+    } else {
+        userSetHttpResponse($code);
+    }
+
+    return formatResponse('', getHttpResponseMessage(), $errors, $action);
 }

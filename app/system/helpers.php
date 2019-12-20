@@ -30,35 +30,56 @@ function getHttpResponseMessage()
 
 function httpResonseSuccess()
 {
-    $responseCode = setHttpResponseCode(200, 'Success');
+    $responseCode = setHttpResponseCode(HTTP_SUCCESS, 'Success');
     http_response_code($responseCode);
 }
 
 function httpResonseUnauthorized()
 {
-    $responseCode = setHttpResponseCode(401, 'Unauthorized');
+    $responseCode = setHttpResponseCode(HTTP_UNAUTHORIZED, 'Unauthorized');
     http_response_code($responseCode);
 }
 
 function httpResonseNotFound()
 {
-    $responseCode = setHttpResponseCode(404, 'Request not found');
+    $responseCode = setHttpResponseCode(HTTP_NOT_FOUND, 'Request not found');
     http_response_code($responseCode);
 }
 
 function httpResonseUnprocessable()
 {
-    $responseCode = setHttpResponseCode(422, 'Unprocessable');
+    $responseCode = setHttpResponseCode(HTTP_UNPROCESSABLE, 'Unprocessable');
     http_response_code($responseCode);
 }
 
 function httpResonseServiceUnavailable()
 {
-    $responseCode = setHttpResponseCode(503, 'Service Unavailable');
+    $responseCode = setHttpResponseCode(HTTP_SERVICE_UNAVAILABLE, 'Service Unavailable');
     http_response_code($responseCode);
 }
 
-function renderView($path)
+function userSetHttpResponse($code)
+{
+    switch ($code) {
+        case HTTP_SUCCESS:
+            httpResonseSuccess();
+            break;
+        case HTTP_UNAUTHORIZED:
+            httpResonseUnauthorized();
+            break;
+        case HTTP_NOT_FOUND:
+            httpResonseNotFound();
+            break;
+        case HTTP_SERVICE_UNAVAILABLE;
+            httpResonseServiceUnavailable();
+            break;
+        default:
+            httpResonseUnprocessable();
+            break;
+    }
+}
+
+function view($path)
 {
     require getPagesPath().'/'.$path;
 }
