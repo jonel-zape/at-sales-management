@@ -67,15 +67,15 @@ function route()
             exit;
         }
 
-        if ($route['request_type'] == REQUEST_PAGE) {
-            if ($route['validate_auth'] && !isAuthenticated()) {
-                routeTo('/sign-in');
-            }
+        $isAuthenticationRequired = $route['validate_auth'] && !isAuthenticated();
 
-            pageHeader();
+        if ($route['request_type'] == REQUEST_PAGE) {
+            $header = $isAuthenticationRequired ? routeTo(signInPageLocation()) : pageHeader();
         }
 
-        $moduleResponse = call_user_func(array($object, $function), $value1, $value2);
+        $moduleResponse = $isAuthenticationRequired
+            ? errorResponse([], HTTP_UNAUTHORIZED, GOTO_SIGN_IN)
+            : call_user_func(array($object, $function), $value1, $value2);
 
         if ($route['request_type'] == REQUEST_PAGE) {
             pageFooter();

@@ -29,3 +29,8 @@ function pageFooter()
 {
     require getPagesPath().'/master/footer.php';
 }
+
+function signInPageLocation()
+{
+    return '/sign-in';
+}

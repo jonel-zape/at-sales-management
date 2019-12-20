@@ -9,3 +9,4 @@ define('HTTP_UNAUTHORIZED', 401);
 define('HTTP_NOT_FOUND', 404);
 define('HTTP_UNPROCESSABLE', 422);
 define('HTTP_SERVICE_UNAVAILABLE', 503);
+define('GOTO_SIGN_IN', 'goto-sign-in');
