@@ -2,5 +2,5 @@
 
 function isAuthenticated()
 {
-    return false;
+    return true;
 }

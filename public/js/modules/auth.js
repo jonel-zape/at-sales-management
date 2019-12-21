@@ -2,6 +2,17 @@ let auth = {
 
     login()
     {
+        http.post(
+            '/user/all',
+            {
+                'user_id': 0
+            }
+        ).done(function(response){
+            console.log(response);
+        }).catch(function(response){
+            console.log(response);
+        });
+
         this.alertError();
     },
 
