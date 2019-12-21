@@ -9,3 +9,4 @@ function isAuthenticated()
     }
 
     return false;
+}
