@@ -89,3 +89,31 @@ function routeTo($location)
     header('location: '.$location);
     exit;
 }
+
+function post($key)
+{
+    if (isset($_POST[$key])) {
+        return $_POST[$key];
+    }
+
+    return null;
+}
+
+function get($key)
+{
+    if (isset($_GET[$key])) {
+        return $_GET[$key];
+    }
+
+    return null;
+}
+
+function hashString($string)
+{
+    return password_hash($string, PASSWORD_DEFAULT);
+}
+
+function verifyHash($string, $hashed)
+{
+    return password_verify($string, $hashed);
+}

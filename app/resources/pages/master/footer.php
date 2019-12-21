@@ -3,5 +3,6 @@
         <script src="/js/template/Chart.min.js"></script>
         <script src="/js/core.js"></script>
         <script src="/js/http.js"></script>
+        <script src="/js/el.js"></script>
     </body>
 </html>

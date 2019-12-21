@@ -37,6 +37,7 @@ let http = {
         $.ajax({
             method: method,
             url: url,
+            headers: { 'X-USER-TOKEN': 'sample token' },
             data: data,
             dataType: 'json'
         }).done(function(response) {

@@ -2,18 +2,19 @@ let auth = {
 
     login()
     {
+        let that = this;
+
         http.post(
-            '/user/all',
+            '/guest/authenticate',
             {
-                'user_id': 0
+                username: el.val("#username"),
+                password: el.val("#password")
             }
         ).done(function(response){
-            console.log(response);
+            that.alertSuccess();
         }).catch(function(response){
-            console.log(response);
+            that.alertError(response.errors[0]);
         });
-
-        this.alertError();
     },
 
     alertSuccess()
@@ -31,7 +32,7 @@ let auth = {
         $("#alert-container").append(element);
     },
 
-    alertError()
+    alertError(message)
     {
         let element = '';
 
@@ -39,7 +40,7 @@ let auth = {
         element += '    <button type="button" class="close" data-dismiss="alert">';
         element += '        <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>';
         element += '    </button>';
-        element += '    Invalid username or password.';
+        element += message;
         element += '</div>';
 
         $("#alert-container").empty();

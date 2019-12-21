@@ -1,6 +1,11 @@
 <?php
 
+// TODO:
+// Secure using token
 function isAuthenticated()
 {
-    return true;
-}
+    if (isset($_SESSION['user_id'])) {
+        return true;
+    }
+
+    return false;
