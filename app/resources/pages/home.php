@@ -1,3 +1,5 @@
-<?php
-
-echo '<h2> Home page </h2>';
+<div class="templatemo-content-wrapper">
+    <div class="templatemo-content">
+        <h1>Abi Thoughts</h1>
+    </div>
+</div>
