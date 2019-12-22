@@ -40,7 +40,7 @@
         <div class="navbar-collapse collapse templatemo-sidebar">
             <ul class="templatemo-sidebar-menu">
                 <li class="active"><a href="#"><i class="fa fa-home"></i>Home</a></li>
-                <li><a href="/productlist"><i class="fa fa-cubes"></i></span>Product Page</a></li>
+                <li><a href="/product"><i class="fa fa-cubes"></i></span>Product Page</a></li>
                 <li><a href="/purchaselist"></span>Purchase Page</a></li>
                 <li><a href="/saleslist"></span>Sales Page</a></li>
                 <li><a href="/paymentlist"></i>Payment Page</a></li>
