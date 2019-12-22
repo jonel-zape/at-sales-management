@@ -2,7 +2,6 @@ let list = {
     find() {
         loading.show();
 
-        let that = this;
         http.get(
             '/product/find',
             {
