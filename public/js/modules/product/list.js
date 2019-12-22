@@ -29,6 +29,7 @@ let list = {
             { title:"Selling Price", field:"selling_price", formatter:"money"},
             { title:"Wholesale Price", field:"wholesale_price", formatter:"money"},
             { title:"Memo", field:"memo" },
+            { title:"", field:"control", formatter:"html", align:"right"},
         ];
         dataTable.tabulator.setColumns(columns);
     }

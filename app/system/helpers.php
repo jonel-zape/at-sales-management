@@ -126,3 +126,12 @@ function verifyHash($string, $hashed)
 {
     return password_verify($string, $hashed);
 }
+
+function formatNumber($value)
+{
+    if (!is_numeric($value)) {
+        $value = 0;
+    }
+
+    return number_format((float)$value, 2, '.', '');
+}
