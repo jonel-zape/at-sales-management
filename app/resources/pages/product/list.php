@@ -6,13 +6,13 @@
         </ol>
         <div class="row">
             <div class="col-md-5 margin-bottom-15">
-                <input type="text" class="form-control" placeholder="Enter Keyword">
+                <input type="text" class="form-control" id="keyword" placeholder="Enter Keyword">
             </div>
             <div class="col-md-5 margin-bottom-15">
-                <select class="form-control" id="singleSelect">
-                    <option>All</option>
-                    <option>Name</option>
-                    <option>Description</option>
+                <select class="form-control" id="filterBy">
+                    <option value="0">All</option>
+                    <option value="1">Name</option>
+                    <option value="2">Memo</option>
                 </select>
             </div>
             <div class="col-md-2 margin-bottom-15">
@@ -21,51 +21,13 @@
         </div>
         <div class="row">
             <div class="col-md-12 margin-bottom-15">
+                <?php component('alert.php') ?>
             </div>
         </div>
+
         <div class="row">
             <div class="col-md-12">
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover table-bordered">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Product</th>
-                                <th>Description</th>
-                                <th>Cost</th>
-                                <th>Selling</th>
-                                <th>Wholesale</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            for ($i = 0; $i < 10; $i++) {
-                            ?>
-                            <tr>
-                                <td><?php echo ($i + 1); ?></td>
-                                <td>Product <?php echo ($i + 1); ?></td>
-                                <td>Best selling</td>
-                                <td>40.00</td>
-                                <td>50.00</td>
-                                <td>45.00</td>
-                                <td><a href="<?php echo '/product/edit/'.($i + 1); ?>" class="btn btn-link">View / Edit</a></td>
-                            </tr>
-                            <?php
-                            }
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
-                <ul class="pagination pull-right">
-                    <li class="disabled"><a href="#">&laquo;</a></li>
-                    <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-                    <li><a href="#">2 <span class="sr-only">(current)</span></a></li>
-                    <li><a href="#">3 <span class="sr-only">(current)</span></a></li>
-                    <li><a href="#">4 <span class="sr-only">(current)</span></a></li>
-                    <li><a href="#">5 <span class="sr-only">(current)</span></a></li>
-                    <li><a href="#">&raquo;</a></li>
-                </ul>
+                <?php component('dataTable.php'); ?>
             </div>
         </div>
     </div>

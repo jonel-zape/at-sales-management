@@ -7,9 +7,18 @@
         <meta name="description" content="" />
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="/css/templatemo_main.css">
+        <link rel="stylesheet" href="/js/lib/tabulator/css/tabulator.css">
         <link rel="stylesheet" href="/css/custom.css">
     </head>
     <body>
+
+    <script src="/js/lib/jquery-3.4.1.min.js"></script>
+    <script src="/js/lib/tabulator/js/tabulator.js"></script>
+    <script src="/js/template/bootstrap.min.js"></script>
+    <script src="/js/template/Chart.min.js"></script>
+    <script src="/js/core.js"></script>
+    <script src="/js/http.js"></script>
+    <script src="/js/el.js"></script>
 
     <?php component('loading.php'); ?>
 
