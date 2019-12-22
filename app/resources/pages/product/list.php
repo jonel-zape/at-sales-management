@@ -21,8 +21,10 @@
         </div>
         <div class="row">
             <div class="col-md-12 margin-bottom-15">
+                <?php component('alert.php') ?>
             </div>
         </div>
+
         <div class="row">
             <div class="col-md-12">
                 <?php component('dataTable.php'); ?>

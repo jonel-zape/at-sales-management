@@ -10,10 +10,13 @@ let list = {
                 filterBy: el.val("#filterBy")
             }
         ).done(function(response){
-            that.setDataTableColumns();
-            dataTable.setData(response.values);
+            alert.dismiss();
+            dataTable.tabulator.setData(response.values);
+            dataTable.show();
             loading.hide();
         }).catch(function(response){
+            alert.error(response.errors);
+            dataTable.hide();
             loading.hide();
         });
     },
@@ -28,8 +31,9 @@ let list = {
             { title:"Wholesale Price", field:"wholesale_price", formatter:"money"},
             { title:"Memo", field:"memo" },
         ];
-        dataTable.setColumns(columns);
+        dataTable.tabulator.setColumns(columns);
     }
 };
 
+list.setDataTableColumns();
 list.find();

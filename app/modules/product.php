@@ -52,7 +52,10 @@ class Product
                 AND `deleted_at` IS NULL'
                 .$filter
         );
+        if (count($data) > 0) {
+            return successfulResponse($data);
+        }
 
-        return successfulResponse($data);
+        return errorResponse(['No results found.']);
     }
 }

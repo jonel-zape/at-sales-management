@@ -8,8 +8,7 @@
         <div class="form-horizontal templatemo-signin-form" role="form">
             <div class="form-group">
                 <div class="col-md-12">
-                  <div class="templatemo-alerts" id="alert-container">
-                  </div>
+                    <?php component('alert.php') ?>
                 </div>
             </div>
             <div class="form-group">
