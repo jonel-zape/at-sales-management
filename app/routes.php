@@ -7,4 +7,8 @@ addRoute('guest/authenticate', 'auth', REQUEST_JSON, EXCLUDE_AUTH);
 
 addRoute('home', 'home', REQUEST_PAGE);
 
+addRoute('product', 'product', REQUEST_PAGE);
+addRoute('product/create', 'product', REQUEST_PAGE);
+addRoute('product/edit/$', 'product', REQUEST_PAGE);
+
 addRoute('user/all', 'user', REQUEST_JSON);

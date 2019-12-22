@@ -20,6 +20,11 @@ function getModulesPath()
     return '../app/modules/';
 }
 
+function getComponentsPath()
+{
+    return '../app/resources/components/';
+}
+
 function pageHeader()
 {
     require getPagesPath().'/master/header.php';
