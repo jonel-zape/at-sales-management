@@ -10,6 +10,9 @@
         <link rel="stylesheet" href="/css/custom.css">
     </head>
     <body>
+
+    <?php component('loading.php'); ?>
+
     <?php if (isAuthenticated()) { ?>
 
         <div class="navbar navbar-inverse" role="navigation">

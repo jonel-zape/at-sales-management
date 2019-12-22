@@ -6,3 +6,7 @@
     z-index: 9999;
     visibility: hidden;
 }
+
+.progress {
+    height: 8px;
+}
