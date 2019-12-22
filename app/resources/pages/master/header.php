@@ -7,9 +7,9 @@
         <meta name="description" content="" />
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="/css/templatemo_main.css">
+        <link rel="stylesheet" href="/css/custom.css">
     </head>
     <body>
-
     <?php if (isAuthenticated()) { ?>
 
         <div class="navbar navbar-inverse" role="navigation">

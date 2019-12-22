@@ -88,6 +88,11 @@ function view($path, $moduleParameter = [])
     require getPagesPath().'/'.$path;
 }
 
+function component($path)
+{
+    require getComponentsPath().'/'.$path;
+}
+
 function routeTo($location)
 {
     header('location: '.$location);
