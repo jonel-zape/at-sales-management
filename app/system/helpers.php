@@ -2,7 +2,7 @@
 
 $responseCode = 200;
 $responseMessage = 'Success';
-$module = [];
+$moduleParameter = [];
 
 function setHttpResponseCode($code, $message)
 {
@@ -80,11 +80,11 @@ function userSetHttpResponse($code)
     }
 }
 
-function view($path, $moduleParameter = [])
+function view($path, $params = [])
 {
-    global $module;
+    global $moduleParameter;
 
-    $module = $moduleParameter;
+    $moduleParameter = $params;
     require getPagesPath().'/'.$path;
 }
 
