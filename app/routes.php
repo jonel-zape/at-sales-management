@@ -17,5 +17,7 @@ addRoute('product/save', 'product', REQUEST_JSON);
 
 addRoute('purchase', 'purchase', REQUEST_PAGE);
 addRoute('purchase/create', 'purchase', REQUEST_PAGE);
+addRoute('purchase/find', 'purchase', REQUEST_JSON);
+addRoute('purchase/save', 'purchase', REQUEST_JSON);
 
 addRoute('user/all', 'user', REQUEST_JSON);

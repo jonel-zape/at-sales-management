@@ -11,21 +11,21 @@
                 <form role="form" id="templatemo-preferences-form">
                     <div class="row">
                         <div class="col-md-6 margin-bottom-15">
-                            <label for="firstName" class="control-label">Date</label>
-                            <input type="text" class="form-control" id="date" value="<?php echo date("Y-m-d");?>">                  
+                            <label for="date" class="control-label">Date</label>
+                            <input type="date" class="form-control" id="date" value="<?php echo date("Y-m-d");?>">                  
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-12 margin-bottom-15">
-                            <label for="notes">Notes</label>
-                            <textarea class="form-control" rows="3" id="notes"></textarea>
+                            <label for="memo">Memo</label>
+                            <textarea class="form-control" rows="3" id="memo"></textarea>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-12 margin-bottom-15">
-                            <label for="notes">Products</label>
+                            <label>Products</label>
                         </div>
                     </div>
 
