@@ -37,14 +37,51 @@
           </div>
         </div>
 
+        <?php
+            $parentModule = getSegment(1);
+            $controlClass = [
+                'home'     => '',
+                'product'  => '',
+                'purchase' => '',
+                'sales'    => '',
+                'payment'  => ''
+            ];
+
+            if (isset($controlClass[$parentModule])) {
+                $controlClass[$parentModule] = 'active';
+            }
+        ?>
+
         <div class="template-page-wrapper">
             <div class="navbar-collapse collapse templatemo-sidebar">
                 <ul class="templatemo-sidebar-menu">
-                    <li class="active"><a href="#"><i class="fa fa-home"></i>Home</a></li>
-                    <li><a href="/product"><i class="fa fa-cubes"></i>Product Page</a></li>
-                    <li><a href="/purchaselist">Purchase Page</a></li>
-                    <li><a href="/saleslist">Sales Page</a></li>
-                    <li><a href="/paymentlist">Payment Page</a></li>
+                    <li class="<?php echo $controlClass['home'] ?>">
+                        <a href="/home">
+                            <i class="fa fa-home"></i>
+                            Home
+                        </a>
+                    </li>
+                    <li class="<?php echo $controlClass['product'] ?>">
+                        <a href="/product"><i class="fa fa-cubes"></i>Product Page</a>
+                    </li>
+                    <li class="<?php echo $controlClass['purchase'] ?>">
+                        <a href="/purchase">
+                            <i class="fa fa-sitemap"></i>
+                            Purchase Page
+                        </a>
+                    </li>
+                    <li class="<?php echo $controlClass['sales'] ?>">
+                        <a href="/sales">
+                            <i class="fa fa-shopping-cart"></i>
+                            Sales Page
+                        </a>
+                    </li>
+                    <li class="<?php echo $controlClass['payment'] ?>">
+                        <a href="/payment">
+                            <i class="fa fa-money"></i>
+                            Payment Page
+                        </a>
+                    </li>
                     <li style="cursor: pointer;">
                         <a onclick="core.logout();"><i class="fa fa-sign-out"></i>Sign Out</a>
                     </li>
