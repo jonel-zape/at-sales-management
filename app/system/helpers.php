@@ -95,6 +95,7 @@ function component($path)
 
 function routeTo($location)
 {
+    ob_end_clean();
     header('location: '.$location);
     exit;
 }

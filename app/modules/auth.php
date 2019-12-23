@@ -49,4 +49,10 @@ class Auth
 
         return errorResponse(['Invalid username or password.']);
     }
+
+    public function logout()
+    {
+        unset($_SESSION['user_id']);
+        routeTo('/sign-in');
+    }
 }

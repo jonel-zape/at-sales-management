@@ -4,6 +4,7 @@ defaultRoute('auth', REQUEST_PAGE);
 
 addRoute('sign-in', 'auth', REQUEST_PAGE, EXCLUDE_AUTH);
 addRoute('guest/authenticate', 'auth', REQUEST_JSON, EXCLUDE_AUTH);
+addRoute('auth/logout', 'auth', REQUEST_PAGE);
 
 addRoute('home', 'home', REQUEST_PAGE);
 
