@@ -43,7 +43,11 @@ let http = {
         }).done(function(response) {
             doneCallBack(response);
         }).fail(function(response) {
-            failCallBack(response.responseJSON);
+            let failResponse = {errors: ['Invalid request.']};
+            if (typeof response.responseJSON != 'undefined' && response.responseJSON.hasOwnProperty('errors')) {
+                failResponse = response.responseJSON;
+            }
+            failCallBack(failResponse);
         });
     }
 };

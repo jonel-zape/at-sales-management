@@ -218,23 +218,16 @@ class Product
                 break;
         }
 
-        $control = '
-            CONCAT(
-                \'<a href="product/edit/\', `id`, \'">Edit</a>\',
-                \'&nbsp;&nbsp;&nbsp;\',
-                \'<a href="#" class="delete-row">Delete</a>\'
-            ) AS `control`';
-
         $data = getData(
             'SELECT
+                `id`,
                 `stock_no`,
                 `name`,
                 `short_name`,
                 `cost_price`,
                 `selling_price`,
                 `wholesale_price`,
-                `memo`,
-                '.$control.'
+                `memo`
             FROM `product`
             WHERE
                 `status` = 1
@@ -246,5 +239,24 @@ class Product
         }
 
         return errorResponse(['No results found.']);
+    }
+
+    public function delete()
+    {
+        $request = escapeString([
+            'id' => get('id'),
+        ]);
+
+        $id = $request['id'];
+
+        executeQuery(
+            'UPDATE `product`
+            SET
+                `deleted_at` = NOW(),
+                `updated_at` = NOW()
+            WHERE `id` = '.$id
+        );
+
+        return successfulResponse('Deleted');
     }
 }
