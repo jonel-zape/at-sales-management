@@ -43,7 +43,17 @@ function getData($sql)
 function executeQuery($sql)
 {
     $connection = databaseConnect();
-    mysqli_query($connection, $sql);
+    $execution = @mysqli_query($connection, $sql);
+
+    if (!$execution) {
+        $details = [
+            'description' => mysqli_error($connection),
+            'command' => $sql
+        ];
+
+        respondAndTerminate(errorResponse($details, HTTP_UNPROCESSABLE));
+    }
+
     mysqli_close($connection);
 }
 

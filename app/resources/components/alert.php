@@ -1,4 +1,4 @@
-<div class="templatemo-alerts" id="alert-container"></div>
+<div class="templatemo-alerts" id="notify"></div>
 
 <script type="text/javascript">
     let alert = {
@@ -15,7 +15,8 @@
             element += '</div>';
 
             this.dismiss();
-            $("#alert-container").append(element);
+            $("#notify").append(element);
+            this.focus();
         },
 
         error(errors)
@@ -35,11 +36,17 @@
             element += '</div>';
 
             this.dismiss();
-            $("#alert-container").append(element);
+            $("#notify").append(element);
+            this.focus();
         },
 
         dismiss() {
-            $("#alert-container").empty();
+            $("#notify").empty();
+        },
+
+        focus() {
+            location.href = "#";
+            location.href = "#notify";
         }
     };
 </script>

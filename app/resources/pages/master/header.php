@@ -21,6 +21,7 @@
     <script src="/js/el.js"></script>
 
     <?php component('loading.php'); ?>
+    <?php component('modalConfirm.php'); ?>
 
     <?php if (isAuthenticated()) { ?>
 
@@ -32,38 +33,60 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
-            </button> 
-          </div>   
+            </button>
+          </div>
         </div>
+
+        <?php
+            $parentModule = getSegment(1);
+            $controlClass = [
+                'home'     => '',
+                'product'  => '',
+                'purchase' => '',
+                'sales'    => '',
+                'payment'  => ''
+            ];
+
+            if (isset($controlClass[$parentModule])) {
+                $controlClass[$parentModule] = 'active';
+            }
+        ?>
 
         <div class="template-page-wrapper">
-        <div class="navbar-collapse collapse templatemo-sidebar">
-            <ul class="templatemo-sidebar-menu">
-                <li class="active"><a href="#"><i class="fa fa-home"></i>Home</a></li>
-                <li><a href="/productlist"><i class="fa fa-cubes"></i></span>Product Page</a></li>
-                <li><a href="/purchaselist"></span>Purchase Page</a></li>
-                <li><a href="/saleslist"></span>Sales Page</a></li>
-                <li><a href="/paymentlist"></i>Payment Page</a></li>
-                <li><a href="javascript:;" data-toggle="modal" data-target="#confirmModal"><i class="fa fa-sign-out"></i>Sign Out</a></li>
-            </ul>
-        </div><!--/.navbar-collapse -->
-
-      <!-- Modal -->
-        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Are you sure you want to sign out?</h4>
-                    </div>
-                <div class="modal-footer">
-                    <a href="/sign-in" class="btn btn-primary">Yes</a>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                </div>
-                </div>
+            <div class="navbar-collapse collapse templatemo-sidebar">
+                <ul class="templatemo-sidebar-menu">
+                    <li class="<?php echo $controlClass['home'] ?>">
+                        <a href="/home">
+                            <i class="fa fa-home"></i>
+                            Home
+                        </a>
+                    </li>
+                    <li class="<?php echo $controlClass['product'] ?>">
+                        <a href="/product"><i class="fa fa-cubes"></i>Product Page</a>
+                    </li>
+                    <li class="<?php echo $controlClass['purchase'] ?>">
+                        <a href="/purchase">
+                            <i class="fa fa-sitemap"></i>
+                            Purchase Page
+                        </a>
+                    </li>
+                    <li class="<?php echo $controlClass['sales'] ?>">
+                        <a href="/sales">
+                            <i class="fa fa-shopping-cart"></i>
+                            Sales Page
+                        </a>
+                    </li>
+                    <li class="<?php echo $controlClass['payment'] ?>">
+                        <a href="/payment">
+                            <i class="fa fa-money"></i>
+                            Payment Page
+                        </a>
+                    </li>
+                    <li style="cursor: pointer;">
+                        <a onclick="core.logout();"><i class="fa fa-sign-out"></i>Sign Out</a>
+                    </li>
+                </ul>
             </div>
-        </div>
-
         </div>
 
     <?php } ?>

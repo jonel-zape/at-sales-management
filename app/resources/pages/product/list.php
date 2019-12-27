@@ -3,6 +3,7 @@
         <ol class="breadcrumb">
             <li><a href="/home">Home</a></li>
             <li class="active">Product List</li>
+            <li><a href="/product/create">New Product</a></li>
         </ol>
         <div class="row">
             <div class="col-md-5 margin-bottom-15">
@@ -20,7 +21,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 margin-bottom-15">
+            <div class="col-md-12 margin-bottom-5">
                 <?php component('alert.php') ?>
             </div>
         </div>

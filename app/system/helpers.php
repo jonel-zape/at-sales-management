@@ -2,7 +2,7 @@
 
 $responseCode = 200;
 $responseMessage = 'Success';
-$module = [];
+$moduleParameter = [];
 
 function setHttpResponseCode($code, $message)
 {
@@ -80,11 +80,11 @@ function userSetHttpResponse($code)
     }
 }
 
-function view($path, $moduleParameter = [])
+function view($path, $params = [])
 {
-    global $module;
+    global $moduleParameter;
 
-    $module = $moduleParameter;
+    $moduleParameter = $params;
     require getPagesPath().'/'.$path;
 }
 
@@ -95,6 +95,7 @@ function component($path)
 
 function routeTo($location)
 {
+    ob_end_clean();
     header('location: '.$location);
     exit;
 }
@@ -125,4 +126,13 @@ function hashString($string)
 function verifyHash($string, $hashed)
 {
     return password_verify($string, $hashed);
+}
+
+function formatNumber($value)
+{
+    if (!is_numeric($value)) {
+        $value = 0;
+    }
+
+    return number_format((float)$value, 2, '.', '');
 }
