@@ -259,4 +259,47 @@ class Product
 
         return successfulResponse('Deleted');
     }
+
+    public function autonCompleteSearch()
+    {
+        $request = escapeString([
+            'keyword' => get('keyword'),
+            'field' => get('field')
+        ]);
+
+        $validFields = ['stock_no', 'name'];
+
+        $keyword = $request['keyword'];
+        $field = $request['field'];
+
+        if (!in_array($field, $validFields)) {
+            return errorResponse(['No results found.']);
+        }
+
+        $filter = $field.' LIKE \'%'.$keyword.'%\'';
+
+        $data = getData(
+            'SELECT
+                `id` AS `product_id`,
+                `stock_no`,
+                `name`,
+                `short_name`,
+                '.roundNumberSql('cost_price').',
+                '.roundNumberSql('selling_price').',
+                '.roundNumberSql('wholesale_price').',
+                `memo`
+            FROM `product`
+            WHERE
+                `status` = 1
+                AND `deleted_at` IS NULL
+                AND '.$filter.'
+            LIMIT 10'
+        );
+
+        if (count($data) > 0) {
+            return successfulResponse($data);
+        }
+
+        return errorResponse(['No results found.']);
+    }
 }

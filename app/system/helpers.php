@@ -88,7 +88,7 @@ function view($path, $params = [])
     require getPagesPath().'/'.$path;
 }
 
-function component($path)
+function component($path, $params = [])
 {
     require getComponentsPath().'/'.$path;
 }
@@ -134,5 +134,62 @@ function formatNumber($value)
         $value = 0;
     }
 
-    return number_format((float)$value, 2, '.', '');
+    return number_format((float)$value, getMonetaryPrecision(), '.', '');
+}
+
+function toNumber($value)
+{
+    return (float)str_replace(',', '', trim($value));
+}
+
+function getDateToday()
+{
+    return date("Y-m-d");
+}
+
+function printDateToday()
+{
+    echo getDateToday();
+}
+
+function printBoolean($boolean)
+{
+    echo $boolean ? 'true' : 'false';
+}
+
+function elementReadOnly($boolean)
+{
+    echo $boolean ? 'readonly="true"' : '';
+}
+
+function tickCheckedBoxIfNotNull($value)
+{
+    if (!is_null($value)) {
+        echo 'checked';
+    }
+}
+
+function nullToEmpty($value)
+{
+    return is_null($value) ? '' : $value;
+}
+
+function printNullToEmpty($value)
+{
+    echo nullToEmpty($value);
+}
+
+function isValidDate($value, $allowEmpty = false)
+{
+    if ($allowEmpty && trim($value) == '') {
+        return true;
+    }
+
+    $dates = explode('-', trim($value));
+
+    if (isset($dates[0]) && isset($dates[1]) && isset($dates[2])) {
+        return checkdate($dates[1], $dates[2], $dates[0]);
+    }
+
+    return false;
 }
