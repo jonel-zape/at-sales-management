@@ -39,7 +39,7 @@ let list = {
             { title: "Memo", field: "memo", width: 220},
             { formatter: deleteIcon, width: 40, align: "center", cellClick: function(e, cell){ that.delete(e, cell); }},
         ];
-        dataTable.tabulator.setColumns(columns);
+        dataTable.setColumns(columns);
 
         dataTable.rowClicked = function(e, row){
             window.location = "/product/edit/" + row.getData().id;

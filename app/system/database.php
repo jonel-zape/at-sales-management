@@ -43,15 +43,29 @@ function getData($sql)
 function executeQuery($sql)
 {
     $connection = databaseConnect();
-    $execution = @mysqli_query($connection, $sql);
 
-    if (!$execution) {
-        $details = [
-            'description' => mysqli_error($connection),
-            'command' => $sql
-        ];
+    if (is_array($sql)) {
+        foreach ($sql as $command) {
+            $execution = @mysqli_query($connection, $command);
+            if (!$execution) {
+                $details = [
+                    'description' => mysqli_error($connection),
+                    'command' => $sql
+                ];
 
-        respondAndTerminate(errorResponse($details, HTTP_UNPROCESSABLE));
+                respondAndTerminate(errorResponse($details, HTTP_UNPROCESSABLE));
+            }
+        }
+    } else {
+        $execution = @mysqli_query($connection, $sql);
+        if (!$execution) {
+            $details = [
+                'description' => mysqli_error($connection),
+                'command' => $sql
+            ];
+
+            respondAndTerminate(errorResponse($details, HTTP_UNPROCESSABLE));
+        }
     }
 
     mysqli_close($connection);
@@ -62,10 +76,50 @@ function escapeString($data)
     $escaped = [];
 
     $connection = databaseConnect();
-    foreach ($data as $key => $value) {
-        $escaped[$key] = mysqli_real_escape_string($connection, $value);
+
+    if (is_array($data)) {
+        foreach ($data as $key => $value) {
+            if (is_null($value)) {
+                $escaped[$key] = null;
+            } else {
+                $escaped[$key] = mysqli_real_escape_string($connection, $value);
+            }
+        }
+    } else {
+        $escaped = mysqli_real_escape_string($connection, $data);
     }
+
     mysqli_close($connection);
 
     return $escaped;
+}
+
+function formatNumberSql($raw, $alias = null)
+{
+    $alias = is_null($alias) ? $raw : $alias;
+
+    return 'FORMAT('.$raw.', '.getMonetaryPrecision().') AS '.$alias;
+}
+
+function roundNumberSql($raw, $alias = null)
+{
+    $alias = is_null($alias) ? $raw : $alias;
+
+    return 'ROUND('.$raw.', '.getMonetaryPrecision().') AS '.$alias;
+}
+
+function dateOnlySql($raw, $alias = null)
+{
+    $alias = is_null($alias) ? $raw : $alias;
+
+    return 'DATE('.$raw.') AS '.$alias;
+}
+
+function cancelIfEmpty($value, $logic)
+{
+    if (trim($value) == '') {
+        return '';
+    }
+
+    return $logic;
 }

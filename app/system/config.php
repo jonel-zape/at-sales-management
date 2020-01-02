@@ -39,3 +39,8 @@ function signInPageLocation()
 {
     return '/sign-in';
 }
+
+function getMonetaryPrecision()
+{
+    return 2;
+}

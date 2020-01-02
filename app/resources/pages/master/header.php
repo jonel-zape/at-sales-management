@@ -8,14 +8,20 @@
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="/css/templatemo_main.css">
         <link rel="stylesheet" href="/js/lib/tabulator/css/tabulator.css">
+        <link rel="stylesheet" href="/js/lib/autocomplete/styles.css">
+        <link rel="stylesheet" href="/js/lib/datepicker/datepicker.css">
+
         <link rel="stylesheet" href="/css/custom.css">
     </head>
     <body>
 
     <script src="/js/lib/jquery-3.4.1.min.js"></script>
+    <script src="/js/lib/autocomplete/jquery.autocomplete.min.js"></script>
     <script src="/js/lib/tabulator/js/tabulator.js"></script>
     <script src="/js/template/bootstrap.min.js"></script>
     <script src="/js/template/Chart.min.js"></script>
+    <script src="/js/template/templatemo_script.js"></script>
+    <script src="/js/lib/datepicker/datepicker.js"></script>
     <script src="/js/core.js"></script>
     <script src="/js/http.js"></script>
     <script src="/js/el.js"></script>
@@ -42,6 +48,8 @@
             $controlClass = [
                 'home'     => '',
                 'product'  => '',
+                'supplier' => '',
+                'customer' => '',
                 'purchase' => '',
                 'sales'    => '',
                 'payment'  => ''
@@ -62,24 +70,24 @@
                         </a>
                     </li>
                     <li class="<?php echo $controlClass['product'] ?>">
-                        <a href="/product"><i class="fa fa-cubes"></i>Product Page</a>
+                        <a href="/product"><i class="fa fa-cubes"></i>Product</a>
                     </li>
                     <li class="<?php echo $controlClass['purchase'] ?>">
                         <a href="/purchase">
                             <i class="fa fa-sitemap"></i>
-                            Purchase Page
+                            Purchase
                         </a>
                     </li>
                     <li class="<?php echo $controlClass['sales'] ?>">
                         <a href="/sales">
                             <i class="fa fa-shopping-cart"></i>
-                            Sales Page
+                            Sales
                         </a>
                     </li>
                     <li class="<?php echo $controlClass['payment'] ?>">
                         <a href="/payment">
                             <i class="fa fa-money"></i>
-                            Payment Page
+                            Payment
                         </a>
                     </li>
                     <li style="cursor: pointer;">
