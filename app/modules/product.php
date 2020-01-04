@@ -267,7 +267,7 @@ class Product
             'field' => get('field')
         ]);
 
-        $validFields = ['stock_no', 'name'];
+        $validFields = ['stock_no', 'name', 'short_name'];
 
         $keyword = $request['keyword'];
         $field = $request['field'];

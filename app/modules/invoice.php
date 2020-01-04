@@ -7,9 +7,7 @@ abstract class Invoice
 
     protected function getNewInvoice()
     {
-        $format = $this->getInvoicePrefix().'000000000000000';
-
-        $invoice = getData("SELECT COALESCE(MAX(`id`), '".$format."') AS 'invoice' FROM ".$this->table);
+        $invoice = getData("SELECT COALESCE(MAX(`id`), 0) AS 'invoice' FROM ".$this->table);
         $invoice = $invoice[0]['invoice'] + 1;
 
         return $this->getInvoicePrefix().sprintf("%015d", $invoice);
