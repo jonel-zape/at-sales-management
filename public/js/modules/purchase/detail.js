@@ -60,28 +60,29 @@ let detail = {
                 width    : 120,
                 editor   : "input"
             },
-            {
+            /* {
                 title    : "Name",
                 field    :"name",
                 formatter: "plaintext",
                 width    : 300,
                 editor   : "input"
-            },
+            }, */
             {
                 title    : "Short Name",
                 field    : "short_name",
                 formatter: "plaintext",
-                width    : 120
+                width    : 255,
+                editor   : "input"
             },
-            {
+            /* {
                 title: "Memo",
                 field: "memo",
                 width: 220
-            },
+            }, */
             {
                 title    : "Cost",
                 field    : "cost_price",
-                width    : 120,
+                width    : 80,
                 formatter: "money",
                 align    : "right",
                 editor   : "input",
@@ -90,7 +91,7 @@ let detail = {
             {
                 title    : "Quantity",
                 field    : "quantity",
-                width    : 120,
+                width    : 100,
                 formatter: "money",
                 align    : "right",
                 editor   : "input",
@@ -99,7 +100,7 @@ let detail = {
             {
                 title    : "Amount",
                 field    : "amount",
-                width    : 120,
+                width    : 100,
                 formatter: "money",
                 align    : "right",
             },
@@ -129,17 +130,19 @@ let detail = {
             },
             selected: function(result) {
                 that.autocompleteOnSelected(result);
+                that.getSummary();
             }
         });
 
         dataTable.autocomplete({
-            field : 'name',
+            field : 'short_name',
             route : '/product/autonCompleteSearch',
             result: function(item) {
                 return that.autocompleteResultFormat(item);
             },
             selected: function(result) {
                 that.autocompleteOnSelected(result);
+                that.getSummary();
             }
         });
 
