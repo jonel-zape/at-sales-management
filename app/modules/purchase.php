@@ -185,11 +185,12 @@ class Purchase extends Invoice
             'SELECT COALESCE(received_at, 0) AS received_at FROM `purchase` WHERE id = '.$id
         );
 
-        $transaction = [];
+        $transaction = [
+            'editable_detail' => true
+        ];
+
         if (count($data) > 0) {
-            $transaction = [
-                'editable_detail' => $data[0]['received_at'] == 0
-            ];
+            $transaction['editable_detail'] = $data[0]['received_at'] == 0;
         }
 
         $details = getData(
