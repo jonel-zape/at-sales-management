@@ -182,6 +182,17 @@ class Purchase extends Invoice
         }
 
         $data = getData(
+            'SELECT COALESCE(received_at, 0) AS received_at FROM `purchase` WHERE id = '.$id
+        );
+
+        $transaction = [];
+        if (count($data) > 0) {
+            $transaction = [
+                'editable_detail' => $data[0]['received_at'] == 0
+            ];
+        }
+
+        $details = getData(
             'SELECT
                 D.`id` AS `detail_id`,
                 D.`product_id`,
@@ -199,6 +210,9 @@ class Purchase extends Invoice
             WHERE transaction_id = '.$id
         );
 
-        return successfulResponse(['details' => $this->tabulatorCompatible($data)]);
+        return successfulResponse([
+            'transaction' => $transaction,
+            'details'     => $this->tabulatorCompatible($details)
+        ]);
     }
 }

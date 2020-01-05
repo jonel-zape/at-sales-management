@@ -1,6 +1,65 @@
 let detail = {
     products: [],
 
+    columns: [
+        {
+            formatter: "rownum",
+            align    : "center",
+            width    : 40
+        },
+        {
+            title    : dataTable.headerWithPencilIcon("Stock No"),
+            field    : "stock_no",
+            formatter: "plaintext",
+            width    : 120,
+            editor   : "input"
+        },
+        {
+            title    : dataTable.headerWithPencilIcon("Short Name"),
+            field    : "short_name",
+            formatter: "plaintext",
+            width    : 245,
+            editor   : "input"
+        },
+        {
+            title    : dataTable.headerWithPencilIcon("Cost"),
+            field    : "cost_price",
+            width    : 90,
+            formatter: "money",
+            align    : "right",
+            editor   : "input",
+            validator: ["min:0", "numeric"]
+        },
+        {
+            title    : dataTable.headerWithPencilIcon("Quantity"),
+            field    : "quantity",
+            width    : 120,
+            formatter: "money",
+            align    : "right",
+            editor   : "input",
+            validator:["min:1", "integer"]
+        },
+        {
+            title    : "Amount",
+            field    : "amount",
+            width    : 100,
+            formatter: "money",
+            align    : "right",
+        },
+        {
+            title : dataTable.headerWithPencilIcon("Remark"),
+            field : "remark",
+            width : 200,
+            editor: "input",
+        },
+        {
+            formatter: dataTable.deleteIcon,
+            width    : 40,
+            align    : "center",
+            cellClick: function(e, cell){ detail.delete(e, cell); }
+        },
+    ],
+
     save() {
         if (dataTable.hasValidationError()) {
             alert.error(['Please finalize row']);
@@ -40,85 +99,9 @@ let detail = {
     },
 
     setTable() {
-
         let that = this;
 
-        let deleteIcon = function(cell, formatterParams){
-            return "<i class='fa fa-times color-red'></i>";
-        };
-
-        let columns = [
-            {
-                formatter: "rownum",
-                align    : "center",
-                width    : 40
-            },
-            {
-                title    : "Stock No.",
-                field    : "stock_no",
-                formatter: "plaintext",
-                width    : 120,
-                editor   : "input"
-            },
-            /* {
-                title    : "Name",
-                field    :"name",
-                formatter: "plaintext",
-                width    : 300,
-                editor   : "input"
-            }, */
-            {
-                title    : "Short Name",
-                field    : "short_name",
-                formatter: "plaintext",
-                width    : 255,
-                editor   : "input"
-            },
-            /* {
-                title: "Memo",
-                field: "memo",
-                width: 220
-            }, */
-            {
-                title    : "Cost",
-                field    : "cost_price",
-                width    : 80,
-                formatter: "money",
-                align    : "right",
-                editor   : "input",
-                validator: ["min:0", "numeric"]
-            },
-            {
-                title    : "Quantity",
-                field    : "quantity",
-                width    : 100,
-                formatter: "money",
-                align    : "right",
-                editor   : "input",
-                validator:["min:1", "integer"]
-            },
-            {
-                title    : "Amount",
-                field    : "amount",
-                width    : 100,
-                formatter: "money",
-                align    : "right",
-            },
-            {
-                title : "Remark",
-                field : "remark",
-                width : 220,
-                editor: "input",
-            },
-            {
-                formatter: deleteIcon,
-                width    : 40,
-                align    : "center",
-                cellClick: function(e, cell){ that.delete(e, cell); }
-            },
-        ];
-
-        dataTable.setColumns(columns);
+        dataTable.setColumns(this.columns);
         dataTable.setData(this.products);
         this.addInsertingRow();
 
@@ -170,13 +153,45 @@ let detail = {
         ).done(function(response){
             that.products = response.values.details;
             dataTable.setData(that.products);
-            that.addInsertingRow();
+
+            if (!response.values.transaction.editable_detail) {
+                that.disableDetailEditing();
+            } else {
+                that.addInsertingRow();
+            }
+
             that.getSummary();
             loading.hide();
         }).catch(function(response){
             alert.error(response.errors);
             loading.hide();
         });
+    },
+
+    disableDetailEditing() {
+        let index = dataTable.findColumnIndexByField("stock_no", this.columns);
+        this.columns[index].title = "Stock No";
+        delete this.columns[index].editor;
+
+        index = dataTable.findColumnIndexByField("short_name", this.columns);
+        this.columns[index].title = "Short Name";
+        delete this.columns[index].editor;
+
+        index = dataTable.findColumnIndexByField("cost_price", this.columns);
+        this.columns[index].title = "Cost";
+        delete this.columns[index].editor;
+
+        index = dataTable.findColumnIndexByField("quantity", this.columns);
+        this.columns[index].title = "Quantity";
+        delete this.columns[index].editor;
+
+        index = dataTable.findColumnIndexByField("remark", this.columns);
+        this.columns[index].title = "Remark";
+        delete this.columns[index].editor;
+
+        this.columns.pop();
+
+        dataTable.setColumns(this.columns);
     },
 
     delete(e, cell) {

@@ -139,12 +139,26 @@
             this.tabulator.setPage(this.tabulator.getPageMax());
             this.tabulator.setPage(this.tabulator.getPageMax());
         },
-        getRowEditingIndex()
-        {
+        getRowEditingIndex() {
             return this.rowEditingIndex;
         },
         hasValidationError() {
             return dataTable.invalidRow > -1;
+        },
+        deleteIcon: function(cell, formatterParams){
+            return "<i class='fa fa-times color-red'></i>";
+        },
+        headerWithPencilIcon(title) {
+            return "<i class=\"fa fa-pencil\" aria-hidden=\"true\"></i> " + title;
+        },
+        findColumnIndexByField(key, columns) {
+            for (let i = columns.length - 1; i >= 0; i--) {
+                if (columns[i].hasOwnProperty("field") && columns[i].field == key) {
+                    return i;
+                }
+            }
+
+            return -1;
         }
     };
 </script>

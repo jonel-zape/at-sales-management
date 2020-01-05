@@ -181,13 +181,17 @@ function printNullToEmpty($value)
 
 function isValidDate($value, $allowEmpty = false)
 {
-    if ($allowEmpty && trim($value) == '') {
+    if ($allowEmpty && (trim($value) == '' || is_null($value))) {
         return true;
     }
 
     $dates = explode('-', trim($value));
 
     if (isset($dates[0]) && isset($dates[1]) && isset($dates[2])) {
+        if (!is_numeric($dates[0]) || !is_numeric($dates[1]) || !is_numeric($dates[2])) {
+            return false;
+        }
+
         return checkdate($dates[1], $dates[2], $dates[0]);
     }
 

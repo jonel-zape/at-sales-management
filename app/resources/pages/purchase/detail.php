@@ -82,7 +82,8 @@
                                                         'dateInput.php',
                                                         [
                                                             'id'    => 'received_at',
-                                                            'value' => nullToEmpty($moduleParameter['received_at'])
+                                                            'value' => nullToEmpty($moduleParameter['received_at']),
+                                                            'attributes' => 'placeholder="Select a Date"'
                                                         ]
                                                     );
                                                 ?>
