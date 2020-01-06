@@ -2,8 +2,8 @@
     <div class="templatemo-content">
         <ol class="breadcrumb">
             <li><a href="/home">Home</a></li>
-            <li><a href="/purchase">Purchase List</a></li>
-            <li class="active">Purchase Detail</li>
+            <li><a href="/sales">Sales List</a></li>
+            <li class="active">Sales Detail</li>
         </ol>
         <div class="row">
             <div class="col-md-12">
@@ -14,8 +14,13 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-12" align="right">
+                            <span class="badge draft" id="status">DRAFT</span>
+                        </div>
+                    </div>
+                    <div class="row">
                         <input type="hidden" id="id" value="<?php echo $moduleParameter['id']; ?>">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="invoice_number" class="control-label">Invoice No.</label>
                             <input
                                 type="text"
@@ -25,7 +30,16 @@
                                 value="<?php echo $moduleParameter['invoice_number'] ?>"
                             >
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <label for="date" class="control-label">Transaction ID</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="transaction_id"
+                                value="<?php echo $moduleParameter['transaction_id'] ?>"
+                            >
+                        </div>
+                        <div class="col-md-4">
                             <label for="date" class="control-label">Date</label>
                             <?php
                                 component(
@@ -51,17 +65,6 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="tab-pane" id="messages">
-                                <div class="list-group">
-                                    <span class="list-group-item active">Sales</span>
-                                    <a href="#" class="list-group-item">S00000000000001</a>
-                                    <a href="#" class="list-group-item">S00000000000002</a>
-                                    <a href="#" class="list-group-item">S00000000000003</a>
-                                    <a href="#" class="list-group-item">S00000000000004</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="tab-pane">
@@ -70,19 +73,19 @@
                                                 <label class="checkbox-inline">
                                                     <input
                                                         type="checkbox"
-                                                        id="is_received"
-                                                        onchange="detail.toggleReceived()"
-                                                        <?php tickCheckedBoxIfNotNull($moduleParameter['received_at']); ?>
-                                                    > Received
+                                                        id="is_returned"
+                                                        onchange="detail.toggleReturned()"
+                                                        <?php tickCheckedBoxIfNotNull($moduleParameter['returned_at']); ?>
+                                                    > Returned to Seller
                                                 </label>
                                             </li>
-                                            <li class="list-group-item" id="received_at_container">
+                                            <li class="list-group-item" id="returned_at_container">
                                                 <?php
                                                     component(
                                                         'dateInput.php',
                                                         [
-                                                            'id'    => 'received_at',
-                                                            'value' => nullToEmpty($moduleParameter['received_at']),
+                                                            'id'    => 'returned_at',
+                                                            'value' => nullToEmpty($moduleParameter['returned_at']),
                                                             'attributes' => 'placeholder="Select a Date"'
                                                         ]
                                                     );
@@ -92,6 +95,8 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-md-6">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="tab-pane">
@@ -116,10 +121,6 @@
                                 <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                 Save
                             </button>
-                            <button type="button" class="btn btn-success" onclick="detail.save()">
-                                <i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>
-                                Sell
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -128,4 +129,4 @@
     </div>
 </div>
 
-<script src="/js/modules/purchase/detail.js"></script>
+<script src="/js/modules/sales/detail.js"></script>

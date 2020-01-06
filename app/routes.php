@@ -24,4 +24,7 @@ addRoute('purchase/edit/$', 'purchase', REQUEST_PAGE);
 addRoute('purchase/delete', 'purchase', REQUEST_JSON);
 addRoute('purchase/details', 'purchase', REQUEST_JSON);
 
+addRoute('sales', 'sales', REQUEST_PAGE);
+addRoute('sales/create', 'sales', REQUEST_PAGE);
+
 addRoute('user/all', 'user', REQUEST_JSON);

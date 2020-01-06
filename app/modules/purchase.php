@@ -45,7 +45,7 @@ class Purchase extends Invoice
                 DATE(P.`transaction_date`) AS `transaction_date`,
                 P.`memo`,
                 SUM(COALESCE(D.`qty`, 0)) AS `quantity`,
-                SUM(COALESCE(D.`remaining_qty`, 0)) AS `remaining_quantity`,
+                0 AS `remaining_quantity`,
                 SUM(COALESCE(D.`qty`, 0) * COALESCE(D.`cost_price`, 0)) AS `amount`,
                 IF (P.`received_at` IS NULL, \'Uncreceived\', \'Received\') AS `status`
             FROM `purchase` AS P 
@@ -110,7 +110,6 @@ class Purchase extends Invoice
                 'id'            => $value['detail_id'],
                 'product_id'    => $value['product_id'],
                 'qty'           => toNumber($value['quantity']),
-                'remaining_qty' => toNumber($value['quantity']),
                 'cost_price'    => toNumber($value['cost_price']),
                 'remark'        => $value['remark'],
             ];
@@ -186,11 +185,11 @@ class Purchase extends Invoice
         );
 
         $transaction = [
-            'editable_detail' => true
+            'is_received' => true
         ];
 
         if (count($data) > 0) {
-            $transaction['editable_detail'] = $data[0]['received_at'] == 0;
+            $transaction['is_received'] = $data[0]['received_at'] == 0;
         }
 
         $details = getData(
@@ -204,11 +203,15 @@ class Purchase extends Invoice
                 '.roundNumberSql('D.`cost_price`', 'cost_price').',
                 '.roundNumberSql('D.`qty`', 'quantity').',
                 '.roundNumberSql('D.`cost_price` * D.`qty`', 'amount').',
-                '.roundNumberSql('D.`remaining_qty`', 'remaining_qty').',
+                '.roundNumberSql('D.`qty` - SUM(COALESCE(IF(SH.id IS NOT NULL, 0, S.`qty`), 0))', 'remaining_qty').',
+                '.roundNumberSql('D.`qty` - (D.`qty` - SUM(COALESCE(IF(SH.id IS NOT NULL, 0, S.`qty`), 0)))', 'min_quantity').',
                 D.`remark`
             FROM `purchase_detail` AS D
+            LEFT JOIN `sales_detail` AS S ON S.`purchase_detail_id` = D.`id`
+            LEFT JOIN `sales` AS SH ON SH.`id` = S.`transaction_id` AND SH.`deleted_at` IS NULL
             INNER JOIN `product` AS P ON P.`id` = D.`product_id`
-            WHERE transaction_id = '.$id
+            WHERE D.`transaction_id` = '.$id.'
+            GROUP BY D.`id`'
         );
 
         return successfulResponse([

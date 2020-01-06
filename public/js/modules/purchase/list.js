@@ -83,6 +83,7 @@ let list = {
                 title    : "Status",
                 field    : "status",
                 formatter: "plaintext",
+                align    : "center",
                 width    : 170
             },
             {

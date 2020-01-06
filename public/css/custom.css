@@ -26,3 +26,7 @@
 .inline-to-control {
     margin-top: 18px;
 }
+
+.draft {
+    background-color: #C2931F;
+}

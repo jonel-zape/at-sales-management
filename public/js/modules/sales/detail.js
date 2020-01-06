@@ -8,6 +8,12 @@ let detail = {
             width    : 40
         },
         {
+            title    : "PO Invoice",
+            field    : "purchase_invoice_number",
+            formatter: "plaintext",
+            width    : 170,
+        },
+        {
             title    : dataTable.headerWithPencilIcon("Stock No"),
             field    : "stock_no",
             formatter: "plaintext",
@@ -22,9 +28,9 @@ let detail = {
             editor   : "input"
         },
         {
-            title    : dataTable.headerWithPencilIcon("Cost"),
-            field    : "cost_price",
-            width    : 90,
+            title    : dataTable.headerWithPencilIcon("Price"),
+            field    : "selling_price",
+            width    : 120,
             formatter: "money",
             align    : "right",
             editor   : "input",
@@ -37,15 +43,7 @@ let detail = {
             formatter: "money",
             align    : "right",
             editor   : "input",
-            validator:["min:1", "integer", "required"]
-        },
-        {
-            title    : "Remaining",
-            field    : "remaining_qty",
-            width    : 120,
-            formatter: "money",
-            align    : "right",
-            visible  : false
+            validator: ["min:1", "integer", "required"]
         },
         {
             title    : "Amount",
@@ -115,7 +113,7 @@ let detail = {
 
         dataTable.autocomplete({
             field : 'stock_no',
-            route : '/product/autonCompleteSearch',
+            route : '/purchase/autoCompleteSearch',
             result: function(item) {
                 return that.autocompleteResultFormat(item);
             },
@@ -127,7 +125,7 @@ let detail = {
 
         dataTable.autocomplete({
             field : 'short_name',
-            route : '/product/autonCompleteSearch',
+            route : '/purchase/autoCompleteSearch',
             result: function(item) {
                 return that.autocompleteResultFormat(item);
             },
@@ -140,10 +138,10 @@ let detail = {
         dataTable.cellEdited = function(cell) {
             let index = cell.getRow().getIndex();
 
-            let cost = that.products[index].cost_price;
+            let selling = that.products[index].selling_price;
             let qty = that.products[index].quantity;
 
-            that.products[index].amount = cost * qty;
+            that.products[index].amount = selling * qty;
 
             that.getSummary();
         }
@@ -161,12 +159,7 @@ let detail = {
         ).done(function(response){
             that.products = response.values.details;
             dataTable.setData(that.products);
-
-            if (!response.values.transaction.is_received) {
-                that.transactionReceived();
-            } else {
-                that.addInsertingRow();
-            }
+            that.addInsertingRow();
 
             that.getSummary();
             loading.hide();
@@ -175,39 +168,6 @@ let detail = {
             loading.hide();
         });
     },
-
-    transactionReceived() {
-        let index = dataTable.findColumnIndexByField("stock_no", this.columns);
-        this.columns[index].title = "Stock No";
-        delete this.columns[index].editor;
-
-        index = dataTable.findColumnIndexByField("short_name", this.columns);
-        this.columns[index].title = "Short Name";
-        delete this.columns[index].editor;
-
-        index = dataTable.findColumnIndexByField("cost_price", this.columns);
-        this.columns[index].title = "Cost";
-        delete this.columns[index].editor;
-
-        index = dataTable.findColumnIndexByField("remark", this.columns);
-        this.columns[index].title = "Remark";
-        delete this.columns[index].editor;
-
-        index = dataTable.findColumnIndexByField("remaining_qty", this.columns);
-        this.columns[index].visible = true;
-
-        index = dataTable.findColumnIndexByField("quantity", this.columns);
-        this.columns[index].validator = ["required", "integer", {
-            type: function(cell, value, parameters) {
-                return parseFloat(value) >= parseFloat(cell.getRow().getData().min_quantity);
-            },
-        }];
-
-        this.columns.pop();
-
-        dataTable.setColumns(this.columns);
-    },
-
 
     delete(e, cell) {
         let that = this;
@@ -230,15 +190,14 @@ let detail = {
 
     autocompleteResultFormat(item) {
         return {
-            product_id: item.product_id,
-            stock_no  : item.stock_no,
-            name      : item.name,
-            short_name: item.short_name,
-            memo      : item.memo,
-            cost_price: item.cost_price,
-            quantity  : 1,
-            amount    : item.cost_price,
-            remark    : ''
+            purchase_detail_id      : item.purchase_detail_id,
+            purchase_invoice_number : item.purchase_invoice_number,
+            stock_no                : item.stock_no,
+            short_name              : item.short_name,
+            selling_price           : item.selling_price,
+            quantity                : 1,
+            amount                  : item.selling_price,
+            remark                  : item.remark,
         };
     },
 
@@ -248,50 +207,40 @@ let detail = {
 
         let data = dataTable.getData();
         for (let i = data.length - 1; i >= 0; i--) {
-            if (data[i].product_id == 0) {
+            if (data[i].purchase_detail_id == 0) {
                 continue;
             }
-            if (data[i].product_id == result.product_id && data[i].id != index) {
-                alert.error(['Product cannot be duplicated.']);
+            if (data[i].purchase_detail_id == result.purchase_detail_id && data[i].id != index) {
+                alert.error(['Item cannot be duplicated.']);
                 return;
             }
         }
 
-        this.products[index].product_id = result.product_id;
-        this.products[index].stock_no   = result.stock_no;
-        this.products[index].name       = result.name;
-        this.products[index].short_name = result.short_name;
-        this.products[index].memo       = result.memo;
-        this.products[index].cost_price = result.cost_price;
-        this.products[index].quantity   = result.quantity;
-        this.products[index].amount     = result.amount;
-        this.products[index].remark     = result.remark;
+        this.products[index].detail_id               = result.detail_id;
+        this.products[index].purchase_detail_id      = result.purchase_detail_id;
+        this.products[index].purchase_invoice_number = result.purchase_invoice_number;
+        this.products[index].stock_no                = result.stock_no;
+        this.products[index].short_name              = result.short_name;
+        this.products[index].selling_price           = result.selling_price;
+        this.products[index].quantity                = result.quantity;
+        this.products[index].amount                  = result.amount;
+        this.products[index].remark                  = result.remark;
 
         this.addInsertingRow();
     },
 
     addInsertingRow() {
-        dataTable.addInsertingRow("product_id", this.products, {
-            detail_id         : 0,
-            product_id        : 0,
-            stock_no          : "",
-            name              : "",
-            short_name        : "",
-            memo              : "",
-            cost_price        : "0",
-            quantity          : "1",
-            amount            : "0",
-            remaining_quantity: "0",
-            remark            : ""
+        dataTable.addInsertingRow("purchase_detail_id", this.products, {
+            detail_id              : 0,
+            purchase_detail_id     : 0,
+            purchase_invoice_number: "",
+            stock_no               : "",
+            short_name             : "",
+            selling_price          : "0",
+            quantity               : "1",
+            amount                 : "0",
+            remark                 : ""
         });
-    },
-
-    toggleReceived() {
-        if (el.checkbox.isChecked("#is_received")) {
-            el.show("#received_at_container");
-        } else {
-            el.hide("#received_at_container");
-        }
     },
 
     getSummary() {
@@ -309,9 +258,17 @@ let detail = {
 
         el.setContent("#total_quantity", number.money(totalQuantity));
         el.setContent("#total_amount", number.money(totalAmount));
-    }
+    },
+
+    toggleReturned() {
+        if (el.checkbox.isChecked("#is_returned")) {
+            el.show("#returned_at_container");
+        } else {
+            el.hide("#returned_at_container");
+        }
+    },
 };
 
 detail.setTable();
-detail.loadDetail();
-detail.toggleReceived();
+detail.toggleReturned();
+//detail.loadDetail();

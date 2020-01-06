@@ -6,7 +6,7 @@
             <li><a href="/product/create">New Product</a></li>
         </ol>
         <div class="row">
-            <div class="col-md-5 margin-bottom-15">
+            <div class="col-md-6 margin-bottom-15">
                 <input type="text" class="form-control" id="keyword" placeholder="Enter Keyword">
             </div>
             <div class="col-md-5 margin-bottom-15 inline-to-control">
@@ -16,8 +16,10 @@
                     <option value="2">Memo</option>
                 </select>
             </div>
-            <div class="col-md-2 margin-bottom-15 inline-to-control">
-                <button type="button" class="form-control btn btn-default" onclick="list.find()">Find</button>
+            <div class="col-md-1 margin-bottom-15 inline-to-control">
+                <button type="button" class="form-control btn btn-default" onclick="list.find()">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
             </div>
         </div>
         <div class="row">
