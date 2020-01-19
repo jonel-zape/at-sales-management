@@ -114,8 +114,9 @@ let detail = {
         this.addInsertingRow();
 
         dataTable.autocomplete({
-            field : 'stock_no',
-            route : '/product/autonCompleteSearch',
+            field        : 'stock_no',
+            displayResult: 'stock_no',
+            route        : '/product/autonCompleteSearch',
             result: function(item) {
                 return that.autocompleteResultFormat(item);
             },
@@ -126,8 +127,9 @@ let detail = {
         });
 
         dataTable.autocomplete({
-            field : 'short_name',
-            route : '/product/autonCompleteSearch',
+            field        : 'short_name',
+            displayResult: 'short_name',
+            route        : '/product/autonCompleteSearch',
             result: function(item) {
                 return that.autocompleteResultFormat(item);
             },

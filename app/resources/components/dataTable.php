@@ -76,10 +76,11 @@
             $("#data-table").css("visibility", "visible");
         },
         autocomplete(options = {
-            field   : '',
-            route   : '',
-            result  : {},
-            selected: {}
+            field        : '',
+            displayResult: '',
+            route        : '',
+            result       : {},
+            selected     : {}
         }) {
             let that = this;;
 
@@ -104,7 +105,7 @@
                         return {
                             suggestions: $.map(response.values, function(dataItem) {
                                 return {
-                                    value: dataItem[field],
+                                    value: dataItem[options.displayResult],
                                     data: options.result(dataItem)
                                 };
                             })
