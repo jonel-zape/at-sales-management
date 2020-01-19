@@ -149,6 +149,9 @@
         deleteIcon: function(cell, formatterParams){
             return "<i class='fa fa-times color-red'></i>";
         },
+        arrowLeftIcon: function(cell, formatterParams){
+            return "<i class='fa fa-arrow-left'></i>";
+        },
         headerWithPencilIcon(title) {
             return "<i class=\"fa fa-pencil\" aria-hidden=\"true\"></i> " + title;
         },

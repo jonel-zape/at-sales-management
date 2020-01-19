@@ -17,7 +17,7 @@ let detail = {
             title    : dataTable.headerWithPencilIcon("Stock No"),
             field    : "stock_no",
             formatter: "plaintext",
-            width    : 120,
+            width    : 245,
             editor   : "input"
         },
         {
@@ -39,11 +39,28 @@ let detail = {
         {
             title    : dataTable.headerWithPencilIcon("Quantity"),
             field    : "quantity",
-            width    : 120,
+            width    : 150,
             formatter: "money",
             align    : "right",
             editor   : "input",
-            validator: ["min:1", "integer", "required"]
+            validator: ["min:1", "integer", "required", {
+                type: function(cell, value, parameters) {
+                    return parseFloat(value) <= parseFloat(cell.getRow().getData().available_quantity);
+                },
+            }]
+        },
+        {
+            formatter: dataTable.arrowLeftIcon,
+            width    : 50,
+            align    : "center",
+            cellClick: function(e, cell){ detail.putAll(e, cell); }
+        },
+        {
+            title    : "Available Qty.",
+            field    : "available_quantity",
+            width    : 150,
+            formatter: "money",
+            align    : "right",
         },
         {
             title    : "Amount",
@@ -80,24 +97,25 @@ let detail = {
         loading.show();
         let that= this;
 
-        let received_at = null;
-        if (el.checkbox.isChecked("#is_received")) {
-            received_at = el.val("#received_at");
+        let returnedAt = null;
+        if (el.checkbox.isChecked("#is_returned")) {
+            returnedAt = el.val("#returned_at");
         }
 
         http.post(
-            '/purchase/save',
+            '/sales/save',
             {
                 id              : el.val("#id"),
                 invoice_number  : el.val("#invoice_number"),
+                transaction_id  : el.val("#transaction_id"),
                 transaction_date: el.val("#transaction_date"),
                 memo            : el.val("#memo"),
                 detail          : dataTable.getData(),
-                received_at     : received_at
+                returned_at     : returnedAt
             }
         ).done(function(response){
             alert.success('Saved.');
-            window.location = '/purchase/edit/' + response.values.id;
+            window.location = '/sales/edit/' + response.values.id;
         }).catch(function(response){
             alert.error(response.errors);
             loading.hide();
@@ -112,8 +130,9 @@ let detail = {
         this.addInsertingRow();
 
         dataTable.autocomplete({
-            field : 'stock_no',
-            route : '/purchase/autoCompleteSearch',
+            field        : 'stock_no',
+            displayResult: 'display',
+            route        : '/product/receivedAutoCompleteSearch',
             result: function(item) {
                 return that.autocompleteResultFormat(item);
             },
@@ -124,8 +143,9 @@ let detail = {
         });
 
         dataTable.autocomplete({
-            field : 'short_name',
-            route : '/purchase/autoCompleteSearch',
+            field        : 'short_name',
+            displayResult: 'display',
+            route        : '/product/receivedAutoCompleteSearch',
             result: function(item) {
                 return that.autocompleteResultFormat(item);
             },
@@ -136,15 +156,19 @@ let detail = {
         });
 
         dataTable.cellEdited = function(cell) {
-            let index = cell.getRow().getIndex();
-
-            let selling = that.products[index].selling_price;
-            let qty = that.products[index].quantity;
-
-            that.products[index].amount = selling * qty;
-
-            that.getSummary();
+            that.computeAmount(cell);
         }
+    },
+
+    computeAmount(cell) {
+        let index = cell.getRow().getIndex();
+
+        let selling = this.products[index].selling_price;
+        let qty = this.products[index].quantity;
+
+        this.products[index].amount = selling * qty;
+
+        this.getSummary();
     },
 
     loadDetail() {
@@ -152,7 +176,7 @@ let detail = {
         let that = this;
 
         http.get(
-            '/purchase/details',
+            '/sales/details',
             {
                 id: el.val("#id")
             }
@@ -172,12 +196,12 @@ let detail = {
     delete(e, cell) {
         let that = this;
 
-        if (cell.getRow().getData().product_id == 0) {
+        if (cell.getRow().getData().purchase_detail_id == 0) {
             return;
         }
 
         modalConfirm.show({
-            message: "Are you sure do you want to delete <strong>" + cell.getRow().getData().name + "</strong>?",
+            message: "Are you sure do you want to delete <strong>" + cell.getRow().getData().short_name + "</strong>?",
             confirmYes: function() {
                 that.deleteConfirmed(cell);
             }
@@ -188,6 +212,16 @@ let detail = {
         dataTable.deleteRow(cell.getRow().getIndex());
     },
 
+    putAll(e, cell) {
+        if (cell.getRow().getData().purchase_detail_id == 0) {
+            return;
+        }
+
+        let index = cell.getRow().getIndex();
+        this.products[index].quantity = this.products[index].available_quantity;
+        this.computeAmount(cell);
+    },
+
     autocompleteResultFormat(item) {
         return {
             purchase_detail_id      : item.purchase_detail_id,
@@ -196,8 +230,9 @@ let detail = {
             short_name              : item.short_name,
             selling_price           : item.selling_price,
             quantity                : 1,
+            available_quantity      : item.available_quantity,
             amount                  : item.selling_price,
-            remark                  : item.remark,
+            remark                  : "",
         };
     },
 
@@ -216,13 +251,13 @@ let detail = {
             }
         }
 
-        this.products[index].detail_id               = result.detail_id;
         this.products[index].purchase_detail_id      = result.purchase_detail_id;
         this.products[index].purchase_invoice_number = result.purchase_invoice_number;
         this.products[index].stock_no                = result.stock_no;
         this.products[index].short_name              = result.short_name;
         this.products[index].selling_price           = result.selling_price;
         this.products[index].quantity                = result.quantity;
+        this.products[index].available_quantity      = result.available_quantity;
         this.products[index].amount                  = result.amount;
         this.products[index].remark                  = result.remark;
 
@@ -237,7 +272,8 @@ let detail = {
             stock_no               : "",
             short_name             : "",
             selling_price          : "0",
-            quantity               : "1",
+            quantity               : "0",
+            available_quantity     : "0",
             amount                 : "0",
             remark                 : ""
         });
@@ -271,4 +307,4 @@ let detail = {
 
 detail.setTable();
 detail.toggleReturned();
-//detail.loadDetail();
+detail.loadDetail();

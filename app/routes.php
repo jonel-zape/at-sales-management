@@ -15,6 +15,7 @@ addRoute('product/edit/$', 'product', REQUEST_PAGE);
 addRoute('product/delete', 'product', REQUEST_JSON);
 addRoute('product/save', 'product', REQUEST_JSON);
 addRoute('product/autonCompleteSearch', 'product', REQUEST_JSON);
+addRoute('product/receivedAutoCompleteSearch', 'product', REQUEST_JSON);
 
 addRoute('purchase', 'purchase', REQUEST_PAGE);
 addRoute('purchase/create', 'purchase', REQUEST_PAGE);
@@ -25,6 +26,10 @@ addRoute('purchase/delete', 'purchase', REQUEST_JSON);
 addRoute('purchase/details', 'purchase', REQUEST_JSON);
 
 addRoute('sales', 'sales', REQUEST_PAGE);
+addRoute('sales/find', 'sales', REQUEST_JSON);
 addRoute('sales/create', 'sales', REQUEST_PAGE);
+addRoute('sales/save', 'sales', REQUEST_JSON);
+addRoute('sales/edit/$', 'sales', REQUEST_PAGE);
+addRoute('sales/details', 'sales', REQUEST_JSON);
 
 addRoute('user/all', 'user', REQUEST_JSON);

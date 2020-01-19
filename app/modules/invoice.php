@@ -4,6 +4,7 @@ abstract class Invoice
 {
     protected $table       = '';
     protected $tableDetail = '';
+    protected $detailIdentifier = 'index';
 
     protected function getNewInvoice()
     {
@@ -59,7 +60,7 @@ abstract class Invoice
         if ($escapedHead['id'] == 0) {
             $inserts = [];
             foreach ($details as $key => $value) {
-                if (isset($value['product_id']) && $value['product_id'] == 0) {
+                if (isset($value[$this->detailIdentifier]) && $value[$this->detailIdentifier] == 0) {
                     continue;
                 }
                 $value['transaction_id'] = $transactionId;
@@ -72,7 +73,7 @@ abstract class Invoice
             $inserts = [];
             $updades = [];
             foreach ($details as $key => $value) {
-                if (isset($value['product_id']) && $value['product_id'] == 0) {
+                if (isset($value[$this->detailIdentifier]) && $value[$this->detailIdentifier] == 0) {
                     continue;
                 }
 
@@ -208,6 +209,9 @@ abstract class Invoice
         switch ($this->table) {
             case 'purchase':
                 return 'P';
+                break;
+            case 'sales':
+                return 'S';
                 break;
         }
 

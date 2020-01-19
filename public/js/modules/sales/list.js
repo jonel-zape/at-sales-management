@@ -1,28 +1,5 @@
 let list = {
 
-    data: [
-        {
-            id: 0,
-            invoice_number: "S00000001",
-            transaction_id: "432342303423234G",
-            transaction_date: "2020-01-04",
-            memo: "Lazada",
-            quantity: 124,
-            amount: 3422,
-            status: "Sold"
-        },
-        {
-            id: 1,
-            invoice_number: "S00000001",
-            transaction_id: "432342303423234G",
-            transaction_date: "2020-01-04",
-            memo: "Shopee",
-            quantity: 124,
-            amount: 3422,
-            status: "RTS"
-        }
-    ],
-
     columns: [
         {
             formatter: "rownum",
@@ -87,29 +64,29 @@ let list = {
     },
 
     find() {
-        dataTable.setData(this.data);
+        //dataTable.setData(this.data);
 
-        // loading.show();
+        loading.show();
 
-        // let that = this;
-        // http.get(
-        //     '/sales/find',
-        //     {
-        //         invoice_number: el.val("#invoice_number"),
-        //         status        : el.val("#status"),
-        //         date_from     : el.val("#date_from"),
-        //         date_to       : el.val("#date_to"),
-        //     }
-        // ).done(function(response){
-        //     alert.dismiss();
-        //     dataTable.setData(this.data);
-        //     dataTable.show();
-        //     loading.hide();
-        // }).catch(function(response){
-        //     alert.error(response.errors);
-        //     dataTable.hide();
-        //     loading.hide();
-        // });
+        let that = this;
+        http.get(
+            '/sales/find',
+            {
+                invoice_number: el.val("#invoice_number"),
+                status        : el.val("#status"),
+                date_from     : el.val("#date_from"),
+                date_to       : el.val("#date_to"),
+            }
+        ).done(function(response){
+            alert.dismiss();
+            dataTable.setData(response.values);
+            dataTable.show();
+            loading.hide();
+        }).catch(function(response){
+            alert.error(response.errors);
+            dataTable.hide();
+            loading.hide();
+        });
     },
 
     setDataTableColumns() {

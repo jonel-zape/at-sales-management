@@ -4,8 +4,9 @@ require 'invoice.php';
 
 class Purchase extends Invoice
 {
-    protected $table       = 'purchase';
-    protected $tableDetail = 'purchase_detail';
+    protected $table            = 'purchase';
+    protected $tableDetail      = 'purchase_detail';
+    protected $detailIdentifier = 'product_id';
 
     public function index()
     {

@@ -302,4 +302,64 @@ class Product
 
         return errorResponse(['No results found.']);
     }
+
+    public function receivedAutoCompleteSearch()
+    {
+        $request = escapeString([
+            'keyword' => get('keyword'),
+            'field' => get('field')
+        ]);
+
+        $validFields = ['stock_no', 'name', 'short_name'];
+
+        $keyword = $request['keyword'];
+        $field = $request['field'];
+
+        if (!in_array($field, $validFields)) {
+            return errorResponse(['No results found.']);
+        }
+
+        $field = 'P.'.$field;
+        $filter = $field.' LIKE \'%'.$keyword.'%\'';
+
+        $display = 'CONCAT('.$field.', \' - \', PH.`invoice_number`) AS `display`';
+
+        $data = getData(
+            'SELECT 
+                P.`id` AS `product_id`,
+                P.`stock_no`,
+                P.`name`,
+                P.`short_name`,
+                '.roundNumberSql('P.cost_price', 'cost_price').',
+                '.roundNumberSql('P.selling_price', 'selling_price').',
+                '.roundNumberSql('P.wholesale_price', 'wholesale_price').',
+                P.`memo`,
+                PD.`id` AS `purchase_detail_id`,
+                '.roundNumberSql('SUM(PD.`qty`)', 'available_quantity').',
+                PH.`invoice_number` AS `purchase_invoice_number`,
+                '.$display.'
+            FROM `product` AS P
+            INNER JOIN `purchase_detail` AS PD ON PD.`product_id` = P.`id`
+            INNER JOIN `purchase` AS PH ON
+                PH.`id` = PD.`transaction_id` 
+                AND PH.`received_at` IS NOT NULL
+                AND PH.`deleted_at` IS NULL
+            LEFT JOIN `sales_detail` AS SD ON SD.`purchase_detail_id` = PD.`id`
+            LEFT JOIN `sales` AS SH ON
+                SH.`id` = SD.`transaction_id`
+                AND SH.`returned_at` IS NOT NULL
+                AND SH.`deleted_at` IS NOT NULL
+            WHERE
+                P.`status` = 1
+                AND P.`deleted_at` IS NULL
+                AND '.$filter.'
+            LIMIT 10'
+        );
+
+        if (count($data) > 0) {
+            return successfulResponse($data);
+        }
+
+        return errorResponse(['No results found.']);
+    }
 }
