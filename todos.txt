@@ -1,0 +1,23 @@
+Date Noted: March 01, 2020
+Date Done: --
+
+Purchase Detail:
+    - Add Status Badge (Unreceive, Received, Sold Out, Paid)
+    - Add message for detail validation such as when user inputs less than the already sold item
+    - Backend validation
+    - sold out update validation
+
+Sales Detail:
+    - Fix bug on remaining QTY is not tally on actual remaining
+    - Backend validation
+    - purchase: sold out update validation
+    - sold out purchase should not appear in auto compelete
+
+Payment:
+    - New module
+
+Login and Security:
+    - Add token validation in all ajax request
+
+-------------------------------
+

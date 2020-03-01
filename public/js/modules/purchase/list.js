@@ -87,10 +87,11 @@ let list = {
                 width    : 170
             },
             {
-                formatter: deleteIcon,
-                width    : 40,
-                align    : "center",
-                cellClick: function(e, cell){ that.delete(e, cell); }
+                formatter : deleteIcon,
+                width     : 40,
+                align     : "center",
+                headerSort: false,
+                cellClick : function(e, cell){ that.delete(e, cell); }
             },
         ];
 

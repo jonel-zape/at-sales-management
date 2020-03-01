@@ -24,6 +24,7 @@ addRoute('purchase/save', 'purchase', REQUEST_JSON);
 addRoute('purchase/edit/$', 'purchase', REQUEST_PAGE);
 addRoute('purchase/delete', 'purchase', REQUEST_JSON);
 addRoute('purchase/details', 'purchase', REQUEST_JSON);
+addRoute('purchase/autonCompleteSearchInvoice', 'purchase', REQUEST_JSON);
 
 addRoute('sales', 'sales', REQUEST_PAGE);
 addRoute('sales/find', 'sales', REQUEST_JSON);

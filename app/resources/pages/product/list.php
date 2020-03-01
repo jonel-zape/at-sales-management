@@ -28,8 +28,16 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 margin-bottom-15">
                 <?php component('dataTable.php'); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 margin-bottom-15">
+                <button type="button" class="btn btn-default" onclick="list.create()">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                    New Product
+                </button>
             </div>
         </div>
     </div>

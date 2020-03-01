@@ -52,10 +52,11 @@ let list = {
             width    : 170
         },
         {
-            formatter: dataTable.deleteIcon,
-            width    : 40,
-            align    : "center",
-            cellClick: function(e, cell){ list.delete(e, cell); }
+            formatter : dataTable.deleteIcon,
+            width     : 40,
+            align     : "center",
+            headerSort: false,
+            cellClick : function(e, cell){ list.delete(e, cell); }
         },
     ],
 

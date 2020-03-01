@@ -117,8 +117,14 @@ class Purchase extends Invoice
         }
 
         $id = $this->insertOrUpdate($head, $details);
+        $this->validateSold($id);
 
         return successfulResponse(['id' => $id]);
+    }
+
+    private function validateSold($id)
+    {
+
     }
 
     public function edit($id)
@@ -182,42 +188,101 @@ class Purchase extends Invoice
         }
 
         $data = getData(
-            'SELECT COALESCE(received_at, 0) AS received_at FROM `purchase` WHERE id = '.$id
+            'SELECT COALESCE(DATE(received_at), 0) AS received_at, `memo`, `invoice_number` FROM `purchase` WHERE id = '.$id
         );
 
         $transaction = [
-            'is_received' => true
+            'is_received'    => true,
+            'received_at'    => '',
+            'memo'           => '',
+            'invoice_number' => ''
         ];
 
         if (count($data) > 0) {
-            $transaction['is_received'] = $data[0]['received_at'] == 0;
+            $transaction['is_received']    = $data[0]['received_at'] == 0;
+            $transaction['received_at']    = $data[0]['received_at'];
+            $transaction['memo']           = $data[0]['memo'];
+            $transaction['invoice_number'] = $data[0]['invoice_number'];
         }
 
-        $details = getData(
-            'SELECT
-                D.`id` AS `detail_id`,
-                D.`product_id`,
-                P.`stock_no`,
-                P.`name`,
-                P.`short_name`,
-                P.`memo`,
-                '.roundNumberSql('D.`cost_price`', 'cost_price').',
-                '.roundNumberSql('D.`qty`', 'quantity').',
-                '.roundNumberSql('D.`cost_price` * D.`qty`', 'amount').',
-                '.roundNumberSql('D.`qty` - SUM(COALESCE(IF(SH.id IS NOT NULL, 0, S.`qty`), 0))', 'remaining_qty').',
-                '.roundNumberSql('D.`qty` - (D.`qty` - SUM(COALESCE(IF(SH.id IS NOT NULL, 0, S.`qty`), 0)))', 'min_quantity').',
-                D.`remark`
-            FROM `purchase_detail` AS D
-            LEFT JOIN `sales_detail` AS S ON S.`purchase_detail_id` = D.`id`
-            LEFT JOIN `sales` AS SH ON SH.`id` = S.`transaction_id` AND SH.`deleted_at` IS NULL
-            INNER JOIN `product` AS P ON P.`id` = D.`product_id`
-            WHERE D.`transaction_id` = '.$id.'
-            GROUP BY D.`id`'
-        );
+        $details = getData('
+            SELECT
+                PR.`invoice_number`,
+                PR.`detail_id`,
+                '.roundNumberSql('PR.`qty`', 'quantity').',
+                '.roundNumberSql('PR.`amount`', 'amount').',
+                '.roundNumberSql('PR.`sold`', 'sold').',
+                '.roundNumberSql('PR.`rts`', 'rts').',
+                '.roundNumberSql('PR.`qty_damage`', 'qty_damage').',
+                '.roundNumberSql('PR.`qty` - PR.`sold`', 'remaining_qty').',
+                '.roundNumberSql('PR.`sold`', 'min_quantity').',
+                '.roundNumberSql('PR.`qty_damage` * PR.`cost_price`', 'lost_amount').',
+                '.roundNumberSql('PR.`cost_price`', 'cost_price').',
+                PR.`remark`,
+                PR.`product_id`,
+                PR.`stock_no`,
+                PR.`name`,
+                PR.`short_name`,
+                PR.`memo`,
+                '.roundNumberSql('PR.`selling_price`', 'selling_price').'
+            FROM(
+                SELECT
+                    P.`invoice_number`,
+                    PD.`id` AS `detail_id`,
+                    PD.`qty`,
+                    PD.`qty` * PD.`cost_price` AS `amount`,
+                    SUM(COALESCE(IF(S.`returned_at` IS NULL, SD.`qty` , 0), 0)) AS `sold`,
+                    SUM(COALESCE(IF(S.`returned_at` IS NOT NULL, SD.`qty` , 0), 0)) AS `rts`,
+                    SUM(COALESCE(IF(S.`returned_at` IS NOT NULL, SD.`qty_damage` , 0), 0)) AS `qty_damage`,
+                    PD.`cost_price`,
+                    PD.`remark`,
+                    PD.`product_id`,
+                    PRDCT.`stock_no`,
+                    PRDCT.`name`,
+                    PRDCT.`short_name`,
+                    PRDCT.`memo`,
+                    PRDCT.`selling_price`
+                FROM `purchase_detail` AS PD
+                INNER JOIN `purchase` AS P ON P.`id` = PD.`transaction_id`
+                LEFT JOIN `sales_detail` AS SD ON SD.`purchase_detail_id` = PD.`id`
+                LEFT JOIN `sales` AS S ON S.`id` = SD.`transaction_id` AND S.`deleted_at` IS NULL
+                INNER JOIN `product` AS PRDCT ON PRDCT.`id` = PD.`product_id`
+                WHERE PD.`transaction_id` = '.$id.'
+                GROUP BY PD.`id`
+            ) AS PR');
 
         return successfulResponse([
             'transaction' => $transaction,
             'details'     => $this->tabulatorCompatible($details)
         ]);
     }
+
+    public function autonCompleteSearchInvoice()
+    {
+        $request = escapeString([
+            'keyword' => get('keyword'),
+        ]);
+
+        $keyword = $request['keyword'];
+
+        $data = getData('
+            SELECT
+                `id`,
+                `invoice_number`
+            FROM `purchase`
+            WHERE
+                `received_at` IS NOT NULL
+                AND `deleted_at` IS NULL
+                AND `invoice_number` LIKE \'%'.$keyword.'%\'
+            LIMIT 10
+        ');
+
+        if (count($data) > 0) {
+            return successfulResponse($data);
+        }
+
+        return successfulResponse([['id' => 0, 'invoice_number' => 'No results found for \''.$keyword.'\'']]);
+    }
+
+
 }

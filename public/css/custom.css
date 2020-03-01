@@ -1,14 +1,31 @@
-.loading-wrapper {
-    background-color: rgba(255, 255, 255, .5);
+#loading {
     position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 9999;
     width: 100%;
     height: 100%;
-    z-index: 9999;
-    visibility: hidden;
+    background-color: rgba(0, 0, 0, .3);
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.progress {
-    height: 8px;
+.loader {
+    border: 5px solid #fff;
+    border-radius: 50%;
+    border-top: 5px solid #4170cc;
+    width: 150px;
+    height: 150px;
+    -webkit-animation: spin 1.5s linear infinite;
+    animation: spin 1.5s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
 }
 
 .color-red {
@@ -23,10 +40,47 @@
     font-size: 14px;
 }
 
+.tabulator-tableHolder {
+    background-color: #fff;
+}
+
+.tabulator {
+    border-color: #bfbfbf;
+}
+
+.tabulator-footer {
+    padding-top: 8px !important;
+    font-size: 12px;
+}
+
+.tabulator-page, .tabulator-page-size {
+    border-radius: 0px !important;
+}
+
 .inline-to-control {
-    margin-top: 18px;
+    margin-top: 20px;
 }
 
 .draft {
     background-color: #C2931F;
+}
+
+.sold {
+    background-color: #00a323;
+}
+
+.rts {
+    background-color: #db4040;
+}
+
+.badge-invoice-status {
+    padding: 7px;
+}
+
+.spacer {
+    height: 14px;
+}
+
+.no-margin {
+    margin: 0px !important;
 }

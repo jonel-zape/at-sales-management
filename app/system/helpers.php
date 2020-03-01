@@ -174,6 +174,11 @@ function nullToEmpty($value)
     return is_null($value) ? '' : $value;
 }
 
+function isEmptyToStringBoolean($value)
+{
+    return nullToEmpty($value) == '' ? 'false' : 'true';
+}
+
 function printNullToEmpty($value)
 {
     echo nullToEmpty($value);

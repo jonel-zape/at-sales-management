@@ -48,6 +48,22 @@ let detail = {
             visible  : false
         },
         {
+            title    : "Sold",
+            field    : "min_quantity",
+            width    : 120,
+            formatter: "money",
+            align    : "right",
+            visible  : false
+        },
+        {
+            title    : "Damaged",
+            field    : "qty_damage",
+            width    : 120,
+            formatter: "money",
+            align    : "right",
+            visible  : false
+        },
+        {
             title    : "Amount",
             field    : "amount",
             width    : 100,
@@ -69,6 +85,11 @@ let detail = {
     ],
 
     save() {
+        let received_at = null;
+        if (el.checkbox.isChecked("#is_received")) {
+            received_at = el.val("#received_at");
+        }
+
         if (dataTable.hasValidationError()) {
             alert.error(['Please finalize row']);
             return;
@@ -79,13 +100,20 @@ let detail = {
             return;
         }
 
+        let errors = [];
+        for (let i = this.products.length - 1; i >= 0; i--) {
+            if (parseFloat(this.products[i].min_quantity) > 0 && received_at == null) {
+                errors.push("Cannot unreceive purhcase because some items are already sold. You can unreceive unsold items by inputting zero in desired item quantity field.");
+                break;
+            }
+        }
+        if (errors.length > 0) {
+            alert.error(errors);
+            return;
+        }
+
         loading.show();
         let that= this;
-
-        let received_at = null;
-        if (el.checkbox.isChecked("#is_received")) {
-            received_at = el.val("#received_at");
-        }
 
         http.post(
             '/purchase/save',
@@ -198,12 +226,18 @@ let detail = {
         index = dataTable.findColumnIndexByField("remaining_qty", this.columns);
         this.columns[index].visible = true;
 
+        index = dataTable.findColumnIndexByField("min_quantity", this.columns);
+        this.columns[index].visible = true;
+
         index = dataTable.findColumnIndexByField("quantity", this.columns);
         this.columns[index].validator = ["required", "integer", {
             type: function(cell, value, parameters) {
                 return parseFloat(value) >= parseFloat(cell.getRow().getData().min_quantity);
             },
         }];
+
+        index = dataTable.findColumnIndexByField("qty_damage", this.columns);
+        this.columns[index].visible = true;
 
         this.columns.pop();
 
@@ -284,6 +318,7 @@ let detail = {
             quantity          : "1",
             amount            : "0",
             remaining_quantity: "0",
+            min_quantity      : "0",
             remark            : ""
         });
     },

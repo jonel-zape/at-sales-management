@@ -1,6 +1,7 @@
 <?php
 
 require 'invoice.php';
+require 'enums.php';
 
 class Sales extends Invoice
 {
@@ -31,7 +32,8 @@ class Sales extends Invoice
         $dateFrom      = $request['date_from'];
         $dateTo        = $request['date_to'];
 
-        $filter = cancelIfEmpty($invoiceNumber, ' AND H.`invoice_number` LIKE \'%'.$invoiceNumber.'%\'');
+        $filter = cancelIfEmpty($invoiceNumber, ' AND (H.`invoice_number` LIKE \'%'.$invoiceNumber.'%\' OR H.`transaction_id` LIKE \'%'.$invoiceNumber.'%\')');
+
         $filter .= cancelIfEmpty(
             $status,
             $status == 1 ? ' AND H.`returned_at` IS NULL' : ' AND H.`returned_at` IS NOT NULL'
@@ -42,6 +44,7 @@ class Sales extends Invoice
         $data = getData(
             'SELECT
                 H.`id`,
+                H.`transaction_id`,
                 H.`invoice_number`,
                 DATE(H.`transaction_date`) AS `transaction_date`,
                 H.`memo`,
@@ -106,13 +109,19 @@ class Sales extends Invoice
 
         $details = [];
         foreach (post('detail') as $key => $value) {
-            $details[] = [
+            $detail = [
                 'id'                 => $value['detail_id'],
                 'purchase_detail_id' => $value['purchase_detail_id'],
                 'qty'                => toNumber($value['quantity']),
                 'selling_price'      => toNumber($value['selling_price']),
                 'remark'             => $value['remark'],
             ];
+
+            if ($returnedAt != null) {
+                $detail['qty_damage'] = toNumber($value['qty_damage']);
+            }
+
+            $details[] = $detail;
         }
 
         $id = $this->insertOrUpdate($head, $details);
@@ -168,31 +177,47 @@ class Sales extends Invoice
         );
 
         $transaction = [
-            'is_returned' => true
+            'is_returned'  => true,
+            'status'       => SALES_DRAFT,
+            'status_class' => 'draft'
         ];
 
         if (count($data) > 0) {
-            $transaction['is_returned'] = $data[0]['returned_at'] == 0;
+            $transaction['is_returned'] = $data[0]['returned_at'] != 0;
+
+            $transaction['status']       = SALES_SOLD;
+            $transaction['status_class'] = 'sold';
+
+            if ($transaction['is_returned']) {
+                $transaction['status']       = SALES_RETURNED_TO_SELLER;
+                $transaction['status_class'] = 'rts';
+            }
         }
 
-        $details = getData(
-            'SELECT
+        $details = getData('
+            SELECT
                 SD.`id` AS `detail_id`,
-                SD.`purchase_detail_id`,
-                PH.`invoice_number` AS `purchase_invoice_number`,
-                P.`stock_no`,
                 P.`short_name`,
-                '.roundNumberSql('SD.`selling_price`', 'selling_price').',
+                P.`stock_no`,
+                PH.`invoice_number` AS `purchase_invoice_number`,
+                SD.`transaction_id`,
+                SD.`purchase_detail_id`,
+                '.roundNumberSql('SD.`qty_damage`', 'qty_damage').',
                 '.roundNumberSql('SD.`qty`', 'quantity').',
-                '.roundNumberSql('SD.`qty`', 'available_quantity').',
+                '.roundNumberSql('(PD.`qty` - SD.`qty`) - SUM(IF(S.`id` IS NULL, 0, COALESCE(SD1.`qty`, 0))) + SD.`qty`', 'max_quantity').',
+                '.roundNumberSql('(PD.`qty` - SD.`qty`) - SUM(IF(S.`id` IS NULL, 0, COALESCE(SD1.`qty`, 0)))', 'available_quantity').',
+                '.roundNumberSql('SD.`selling_price`', 'selling_price').',
                 '.roundNumberSql('SD.qty * SD.`selling_price`', 'amount').',
                 SD.`remark`
             FROM `sales_detail` AS SD
-            INNER JOIN `purchase_detail` AS PD ON PD.`id` = SD.`purchase_detail_id`
+            INNER JOIN `purchase_detail` AS PD ON SD.`purchase_detail_id` = PD.`id`
             INNER JOIN `purchase` AS PH ON PH.`id` = PD.`transaction_id`
-            INNER JOIN `product` AS P ON P.`id` = PD.`product_id`
-            WHERE SD.`transaction_id` = '.$id
-        );
+            LEFT JOIN `product` AS P ON P.`id` = PD.`product_id`
+            LEFT JOIN `sales_detail` AS SD1 ON SD1.`purchase_detail_id` = PD.`id` AND SD1.`transaction_id` <> '.$id.'
+            LEFT JOIN `sales` AS S ON S.`id` = SD1.`transaction_id` AND S.`returned_at` IS NULL AND S.`deleted_at` IS NULL
+            WHERE SD.`transaction_id` = '.$id.'
+            GROUP BY SD.`id`
+        ');
 
         return successfulResponse([
             'transaction' => $transaction,

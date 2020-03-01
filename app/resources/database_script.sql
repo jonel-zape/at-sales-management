@@ -1,13 +1,13 @@
--- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.19, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: atsm
 -- ------------------------------------------------------
--- Server version   5.5.27
+-- Server version 5.7.29-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -21,7 +21,7 @@
 
 DROP TABLE IF EXISTS `product`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product` (
   `id` bigint(10) NOT NULL AUTO_INCREMENT,
   `stock_no` varchar(512) DEFAULT NULL,
@@ -61,7 +61,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `purchase`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `purchase` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `invoice_number` varchar(45) DEFAULT NULL,
@@ -96,7 +96,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `purchase_detail`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `purchase_detail` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `transaction_id` bigint(20) DEFAULT NULL,
@@ -126,7 +126,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `sales`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sales` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `invoice_number` varchar(45) DEFAULT NULL,
@@ -161,12 +161,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `sales_detail`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sales_detail` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `transaction_id` bigint(20) DEFAULT NULL,
   `purchase_detail_id` bigint(20) DEFAULT NULL,
   `qty` decimal(23,6) DEFAULT NULL,
+  `qty_damage` decimal(23,6) DEFAULT '0.000000',
   `selling_price` decimal(23,6) DEFAULT NULL,
   `remark` varchar(1024) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -190,7 +191,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
   `id` bigint(20) NOT NULL,
   `full_name` varchar(512) DEFAULT '',
@@ -223,4 +224,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-01-06 19:35:43
+-- Dump completed on 2020-03-01 20:25:46

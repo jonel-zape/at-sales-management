@@ -15,22 +15,26 @@
                     </div>
                     <div class="row">
                         <input type="hidden" id="id" value="<?php echo $moduleParameter['id']; ?>">
-                        <div class="col-md-6">
+                        <div class="col-md-6 margin-bottom-15">
                             <label for="invoice_number" class="control-label">Invoice No.</label>
                             <input
                                 type="text"
-                                class="form-control"
+                                class="form-control no-margin"
                                 <?php elementReadOnly($moduleParameter['id'] == 0); ?>
                                 id="invoice_number"
                                 value="<?php echo $moduleParameter['invoice_number'] ?>"
                             >
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 margin-bottom-15">
                             <label for="date" class="control-label">Date</label>
                             <?php
                                 component(
                                     'dateInput.php',
-                                    ['id' => 'transaction_date', 'value' => $moduleParameter['transaction_date']]
+                                    [
+                                        'id'    => 'transaction_date',
+                                        'value' => $moduleParameter['transaction_date'],
+                                        'class' => 'no-margin'
+                                    ]
                                 );
                             ?>
                         </div>
@@ -50,17 +54,6 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="tab-pane" id="messages">
-                                <div class="list-group">
-                                    <span class="list-group-item active">Sales</span>
-                                    <a href="#" class="list-group-item">S00000000000001</a>
-                                    <a href="#" class="list-group-item">S00000000000002</a>
-                                    <a href="#" class="list-group-item">S00000000000003</a>
-                                    <a href="#" class="list-group-item">S00000000000004</a>
-                                </div>
-                            </div>
-                        </div>
                         <div class="col-md-6">
                             <div class="row">
                                 <div class="col-md-12">
@@ -92,6 +85,8 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-md-6">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="tab-pane">
@@ -115,10 +110,6 @@
                             <button type="button" class="btn btn-primary" onclick="detail.save()">
                                 <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                 Save
-                            </button>
-                            <button type="button" class="btn btn-success" onclick="detail.save()">
-                                <i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>
-                                Sell
                             </button>
                         </div>
                     </div>

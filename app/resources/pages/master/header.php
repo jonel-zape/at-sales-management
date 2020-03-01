@@ -25,6 +25,7 @@
     <script src="/js/core.js"></script>
     <script src="/js/http.js"></script>
     <script src="/js/el.js"></script>
+    <script src="/js/modules/enums.js"></script>
 
     <?php component('loading.php'); ?>
     <?php component('modalConfirm.php'); ?>

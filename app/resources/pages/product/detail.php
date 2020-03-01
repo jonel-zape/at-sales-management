@@ -24,7 +24,7 @@
                             <label for="stock_no" class="control-label">Stock No.</label>
                             <input
                                 type="text"
-                                class="form-control"
+                                class="form-control no-margin"
                                 id="stock_no"
                                 value="<?php echo $moduleParameter['stock_no']; ?>"
                             >
@@ -35,7 +35,7 @@
                             <label for="name" class="control-label">Name</label>
                             <input
                                 type="text"
-                                class="form-control"
+                                class="form-control no-margin"
                                 id="name"
                                 value="<?php echo $moduleParameter['name']; ?>"
                             >
@@ -44,7 +44,7 @@
                             <label for="short_name" class="control-label">Short Name</label>
                             <input
                                 type="text"
-                                class="form-control"
+                                class="form-control no-margin"
                                 id="short_name"
                                 value="<?php echo $moduleParameter['short_name']; ?>"
                             >
@@ -66,7 +66,7 @@
                             <label for="cost_price" class="control-label">Cost</label>
                             <input
                                 type="text"
-                                class="form-control"
+                                class="form-control no-margin"
                                 id="cost_price"
                                 value="<?php echo $moduleParameter['cost_price']; ?>"
                             >
@@ -75,7 +75,7 @@
                             <label for="selling_price" class="control-label">Selling</label>
                             <input
                                 type="text"
-                                class="form-control"
+                                class="form-control no-margin"
                                 id="selling_price"
                                 value="<?php echo $moduleParameter['selling_price']; ?>"
                             >
@@ -84,7 +84,7 @@
                             <label for="wholesale_price" class="control-label">Wholesale</label>
                             <input
                                 type="text"
-                                class="form-control"
+                                class="form-control no-margin"
                                 id="wholesale_price"
                                 value="<?php echo $moduleParameter['wholesale_price']; ?>"
                             >
@@ -92,7 +92,10 @@
                     </div>
                     <div class="row templatemo-form-buttons">
                         <div class="col-md-12 margin-bottom-15">
-                            <button type="button" class="btn btn-primary" onclick="detail.save()">Save</button>
+                            <button type="button" class="btn btn-primary" onclick="detail.save()">
+                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                Save
+                            </button>
                         </div>
                     </div>
                 </div>

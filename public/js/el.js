@@ -25,6 +25,23 @@ let el = {
         $(identifier).css({"display" : "block"});
     },
 
+    smoothHide(identifier) {
+        $(identifier).css({
+            "visibility" : "hidden",
+            "opacity" : 0,
+            "transition" : "visibility 0s linear 0.2s, opacity 0.2s linear"
+        });
+    },
+
+    smoothShow(identifier) {
+        $(identifier).css({
+            "opacity" : 1,
+            "display" : "flex",
+            "visibility" : "visible",
+            "transition" : "opacity 0.2s linear"
+        });
+    },
+
     setContent(identifier, content) {
         $(identifier).html(content);
     }
