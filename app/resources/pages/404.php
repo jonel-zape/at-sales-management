@@ -1,3 +1,12 @@
+<?php if (!isAuthenticated()) { ?>
+    <style>
+        .templatemo-content {
+            margin: 0px;
+            height: 100%;
+        }
+    </style>
+<?php } ?>
+
 <div class="templatemo-content-wrapper">
     <div class="templatemo-content">
         <div class="alert alert-danger alert-dismissible" role="alert">
@@ -5,3 +14,4 @@
         </div>
     </div>
 </div>
+

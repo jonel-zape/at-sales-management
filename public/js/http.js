@@ -37,7 +37,7 @@ let http = {
         $.ajax({
             method: method,
             url: url,
-            headers: { 'X-USER-TOKEN': 'sample token' },
+            headers: { 'X-USER-TOKEN': window.token },
             data: data,
             dataType: 'json'
         }).done(function(response) {
@@ -47,6 +47,12 @@ let http = {
             if (typeof response.responseJSON != 'undefined' && response.responseJSON.hasOwnProperty('errors')) {
                 failResponse = response.responseJSON;
             }
+
+            if (response.status == 401) {
+                window.alert('Unauthorized. Please login.');
+                window.location = '/auth/logout';
+            }
+
             failCallBack(failResponse);
         });
     }

@@ -1,9 +1,6 @@
 let auth = {
-
-    login()
-    {
-        let that = this;
-
+    login() {
+        alert.dismiss();
         http.post(
             '/guest/authenticate',
             {

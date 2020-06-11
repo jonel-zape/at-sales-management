@@ -1,7 +1,15 @@
-<div class="templatemo-alerts" id="notify"></div>
+<?php
+    $alertId = 'alert';
+
+    if (isset($params['id'])) {
+        $alertId = $params['id'];
+    }
+?>
+
+<div class="templatemo-alerts" id="<?php echo $alertId; ?>"></div>
 
 <script type="text/javascript">
-    let alert = {
+    let <?php echo $alertId; ?> = {
 
         success(message)
         {
@@ -15,7 +23,7 @@
             element += '</div>';
 
             this.dismiss();
-            $("#notify").append(element);
+            $("#<?php echo $alertId; ?>").append(element);
             this.focus();
         },
 
@@ -36,17 +44,16 @@
             element += '</div>';
 
             this.dismiss();
-            $("#notify").append(element);
+            $("#<?php echo $alertId; ?>").append(element);
             this.focus();
         },
 
         dismiss() {
-            $("#notify").empty();
+            $("#<?php echo $alertId; ?>").empty();
         },
 
         focus() {
-            location.href = "#";
-            location.href = "#notify";
+            $("div#<?php echo $alertId; ?>")[0].scrollIntoView();
         }
     };
 </script>

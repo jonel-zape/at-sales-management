@@ -73,6 +73,14 @@ function route()
             $header = $isAuthenticationRequired ? routeTo(signInPageLocation()) : pageHeader();
         }
 
+        if ($route['request_type'] == REQUEST_JSON) {
+            if ($route['validate_auth'] && !isAuthenticatedJson()) {
+                respondAndTerminate(
+                    errorResponse(['Invalid Token'], HTTP_UNAUTHORIZED, GOTO_SIGN_IN)
+                );
+            }
+        }
+
         $moduleResponse = $isAuthenticationRequired
             ? errorResponse([], HTTP_UNAUTHORIZED, GOTO_SIGN_IN)
             : call_user_func(array($object, $function), $value1, $value2);

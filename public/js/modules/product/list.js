@@ -1,4 +1,9 @@
 let list = {
+
+    create() {
+        window.location = "/product/create";
+    },
+
     find() {
         loading.show();
 
@@ -29,15 +34,62 @@ let list = {
         };
 
         let columns = [
-            { formatter: "rownum", align: "center", width: 40},
-            { title: "Stock No.", field: "stock_no", formatter: "plaintext", width: 120},
-            { title: "Name", field:"name", formatter: "plaintext", width: 300},
-            { title: "Short Name", field: "short_name", formatter: "plaintext", width: 120},
-            { title: "Cost Price", field: "cost_price", formatter: "money", align: "right"},
-            { title: "Selling Price", field: "selling_price", formatter:"money", align: "right"},
-            { title: "Wholesale Price", field: "wholesale_price", formatter: "money", align: "right"},
-            { title: "Memo", field: "memo", width: 220},
-            { formatter: deleteIcon, width: 40, align: "center", cellClick: function(e, cell){ that.delete(e, cell); }},
+            {
+                formatter: "rownum",
+                align    : "center",
+                width    : 40
+            },
+            {
+                title    : "Stock No.",
+                field    : "stock_no",
+                formatter: "plaintext",
+                width    : 120
+            },
+            {
+                title    : "Name",
+                field    :"name",
+                formatter: "plaintext",
+                width    : 300
+            },
+            {
+                title    : "Short Name",
+                field    : "short_name",
+                formatter: "plaintext",
+                width    : 150
+            },
+            {
+                title    : "Cost Price",
+                field    : "cost_price",
+                formatter: "money",
+                align    : "right",
+                width    : 150
+            },
+            {
+                title    : "Selling Price",
+                field    : "selling_price",
+                formatter:"money",
+                align    : "right",
+                width    : 150
+            },
+            {
+                title    : "Wholesale Price",
+                field    : "wholesale_price",
+                formatter: "money",
+                align    : "right",
+                width    : 150
+            },
+            {
+                title: "Memo",
+                field: "memo",
+                width: 220
+            },
+            {
+                formatter : deleteIcon,
+                width     : 40,
+                align     : "center",
+                headerSort: false,
+                cellClick : function(e, cell){ that.delete(e, cell); }
+            },
         ];
         dataTable.setColumns(columns);
 

@@ -2,12 +2,12 @@
     <div class="templatemo-content">
         <ol class="breadcrumb">
             <li><a href="/home">Home</a></li>
-            <li class="active">Purchase List</li>
-            <li><a href="/purchase/create">Create New PO</a></li>
+            <li class="active">Sales List</li>
+            <li><a href="/sales/create">Create New Sales</a></li>
         </ol>
          <div class="row">
             <div class="col-md-4 margin-bottom-15">
-                <input type="text" class="form-control" id="invoice_number" placeholder="Search Invoice">
+                <input type="text" class="form-control" id="invoice_number" placeholder="Search Invoice/Transaction ID">
             </div>
             <div class="col-md-2 margin-bottom-15">
                 <?php
@@ -36,8 +36,8 @@
             <div class="col-md-3 margin-bottom-15 inline-to-control">
                 <select class="form-control" id="status">
                     <option value="0">All</option>
-                    <option value="1">Received</option>
-                    <option value="2">Unreceived</option>
+                    <option value="1">Sold</option>
+                    <option value="2">RTS</option>
                 </select>
             </div>
             <div class="col-md-1 margin-bottom-15 inline-to-control">
@@ -55,11 +55,11 @@
             <div class="col-md-12 margin-bottom-5">
                 <div class="panel panel-info legends">
                     <div class="panel-heading">
-                        <i class="fa fa-circle purchase-received" aria-hidden="true"></i>
-                        <span>Received</span>
+                        <i class="fa fa-circle sales-sold" aria-hidden="true"></i>
+                        <span>Sold</span>
                         &nbsp;&nbsp;
-                        <i class="fa fa-circle purchase-unreceived" aria-hidden="true"></i>
-                        <span>Unreceived</span>
+                        <i class="fa fa-circle sales-rts" aria-hidden="true"></i>
+                        <span>Returned to Seller</span>
                     </div>
                 </div>
             </div>
@@ -73,11 +73,11 @@
             <div class="col-md-2 margin-bottom-15">
                 <button type="button" class="btn btn-default" onclick="list.create()">
                     <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                    Create New PO
+                    Create New Sales
                 </button>
             </div>
         </div>
     </div>
 </div>
 
-<script src="/js/modules/purchase/list.js"></script>
+<script src="/js/modules/sales/list.js"></script>

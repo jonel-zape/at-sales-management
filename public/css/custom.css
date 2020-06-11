@@ -1,14 +1,31 @@
-.loading-wrapper {
-    background-color: rgba(255, 255, 255, .5);
+#loading {
     position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 9999;
     width: 100%;
     height: 100%;
-    z-index: 9999;
-    visibility: hidden;
+    background-color: rgba(0, 0, 0, .3);
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.progress {
-    height: 8px;
+.loader {
+    border: 5px solid #fff;
+    border-radius: 50%;
+    border-top: 5px solid #4170cc;
+    width: 150px;
+    height: 150px;
+    -webkit-animation: spin 1.5s linear infinite;
+    animation: spin 1.5s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
 }
 
 .color-red {
@@ -23,6 +40,137 @@
     font-size: 14px;
 }
 
+.tabulator-tableHolder {
+    background-color: #fff;
+}
+
+.tabulator {
+    border-color: #bfbfbf;
+}
+
+.tabulator-footer {
+    padding-top: 8px !important;
+    font-size: 12px;
+}
+
+.tabulator-page, .tabulator-page-size {
+    border-radius: 0px !important;
+}
+
 .inline-to-control {
-    margin-top: 18px;
+    margin-top: 20px;
+}
+
+.new {
+    background-color: rgb(66, 66, 66);
+}
+
+.draft {
+    background-color: #C2931F;
+}
+
+.received {
+    background-color: #05c930;
+}
+
+.unreceived {
+    background-color: rgb(224, 155, 6);
+}
+
+.sold {
+    background-color: #05c930;
+}
+
+.rts {
+    background-color: #db4040;
+}
+
+.badge-invoice-status {
+    padding: 7px;
+}
+
+.spacer {
+    height: 14px;
+}
+
+.no-margin {
+    margin: 0px !important;
+}
+
+.legends {
+    font-size: 90%;
+}
+
+.nav-icon-custom {
+    color: rgb(88, 88, 88);
+}
+
+.payment-paid, .sales-sold, .purchase-received, .summary-net-income {
+    color: rgb(5,201,48);
+}
+
+.payment-unpaid, .sales-rts, .summary-loss {
+    color: rgb(219,64,64);
+}
+
+.payment-incomplete, .purchase-unreceived, .summary-cost, .purchase {
+    color: rgb(224,155,6);
+}
+
+.payment-excess, .summary-sales, .sales {
+    color: rgb(65,112,204);
+}
+
+.widget-net-income {
+    background-color: rgb(5,201,48);
+    border: solid 1px rgb(10, 133, 37);
+}
+
+.widget-loss {
+    background: rgb(219,64,64);
+    border: solid 1px rgb(151, 28, 28);
+}
+
+.widget-cost {
+    background: rgb(224,155,6);
+    border: solid 1px rgb(185, 128, 3);
+}
+
+.widget-sales {
+    background: rgb(65,112,204);
+    border: solid 1px rgb(21, 67, 158);
+}
+
+.modal-backdrop {
+    z-index: 999 !important;
+}
+
+.datepicker-container {
+    z-index: 9999 !important;
+}
+
+.alert-label {
+    color: #db4040;
+    font-size: 90%;
+    font-weight: bold;
+}
+
+.widget {
+    /* background-color: rgb(241, 241, 241); */
+    /* color: #686868; */
+    color: #ffffff;
+    /* border: solid 1px rgb(202, 202, 202); */
+}
+.widget .widget-counter{
+    padding: 15px;
+    padding-bottom: 7px;
+    font-size: 18pt;
+    font-weight: bold;
+    text-align: right;
+}
+
+.widget .widget-label{
+    padding: 15px;
+    padding-top: 7px;
+    font-size: 10pt;
 }

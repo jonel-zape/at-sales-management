@@ -6,11 +6,11 @@
         <meta name="keywords" content="" />
         <meta name="description" content="" />
         <meta name="viewport" content="width=device-width">
+        <link rel="icon" href="/images/logo.png">
         <link rel="stylesheet" href="/css/templatemo_main.css">
         <link rel="stylesheet" href="/js/lib/tabulator/css/tabulator.css">
         <link rel="stylesheet" href="/js/lib/autocomplete/styles.css">
         <link rel="stylesheet" href="/js/lib/datepicker/datepicker.css">
-
         <link rel="stylesheet" href="/css/custom.css">
     </head>
     <body>
@@ -25,15 +25,26 @@
     <script src="/js/core.js"></script>
     <script src="/js/http.js"></script>
     <script src="/js/el.js"></script>
+    <script src="/js/modules/enums.js"></script>
 
     <?php component('loading.php'); ?>
     <?php component('modalConfirm.php'); ?>
 
     <?php if (isAuthenticated()) { ?>
+        <script>
+            window.token = "<?php echo $_SESSION['token']; ?>";
+        </script>
 
         <div class="navbar navbar-inverse" role="navigation">
           <div class="navbar-header">
-            <div class="logo"><h1>Sales Management</h1></div>
+            <div class="logo">
+                <h4>
+                    &nbsp;
+                    <img src="/images/logo.png" />
+                    &nbsp;
+                    Sales Management
+                </h4>
+            </div>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
               <span class="sr-only">Toggle navigation</span>
               <span class="icon-bar"></span>
@@ -52,7 +63,8 @@
                 'customer' => '',
                 'purchase' => '',
                 'sales'    => '',
-                'payment'  => ''
+                'payment'  => '',
+                'settings' => ''
             ];
 
             if (isset($controlClass[$parentModule])) {
@@ -65,33 +77,39 @@
                 <ul class="templatemo-sidebar-menu">
                     <li class="<?php echo $controlClass['home'] ?>">
                         <a href="/home">
-                            <i class="fa fa-home"></i>
+                            <i class="fa fa-home nav-icon-custom"></i>
                             Home
                         </a>
                     </li>
                     <li class="<?php echo $controlClass['product'] ?>">
-                        <a href="/product"><i class="fa fa-cubes"></i>Product</a>
+                        <a href="/product"><i class="fa fa-cubes nav-icon-custom"></i>Product</a>
                     </li>
                     <li class="<?php echo $controlClass['purchase'] ?>">
                         <a href="/purchase">
-                            <i class="fa fa-sitemap"></i>
+                            <i class="fa fa-sitemap nav-icon-custom"></i>
                             Purchase
                         </a>
                     </li>
                     <li class="<?php echo $controlClass['sales'] ?>">
                         <a href="/sales">
-                            <i class="fa fa-shopping-cart"></i>
+                            <i class="fa fa-shopping-cart nav-icon-custom"></i>
                             Sales
                         </a>
                     </li>
                     <li class="<?php echo $controlClass['payment'] ?>">
                         <a href="/payment">
-                            <i class="fa fa-money"></i>
+                            <i class="fa fa-money nav-icon-custom"></i>
                             Payment
                         </a>
                     </li>
+                    <li class="<?php echo $controlClass['settings'] ?>">
+                        <a href="/settings">
+                            <i class="fa fa-gear nav-icon-custom"></i>
+                            Settings
+                        </a>
+                    </li>
                     <li style="cursor: pointer;">
-                        <a onclick="core.logout();"><i class="fa fa-sign-out"></i>Sign Out</a>
+                        <a onclick="core.logout();"><i class="fa fa-sign-out nav-icon-custom"></i>Sign Out</a>
                     </li>
                 </ul>
             </div>

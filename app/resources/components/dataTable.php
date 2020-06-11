@@ -1,48 +1,67 @@
-<div id="data-table"></div>
+<?php
+    $tableId = 'dataTable';
+
+    if (isset($params['id'])) {
+        $tableId = $params['id'];
+    }
+?>
+
+<div id="<?php echo $tableId; ?>"></div>
 
 <script type="text/javascript">
 
-    let dataTable = {
+    let <?php echo $tableId; ?> = {
 
         rowEditingIndex: 0,
         invalidRow: -1,
         isRowClickDisabled: false,
 
-        tabulator: new Tabulator("#data-table", {
+        tabulator: new Tabulator("#<?php echo $tableId; ?>", {
             autoColumns: false,
             pagination: "local",
             paginationSize: 10,
             reactiveData: true,
             paginationSizeSelector: [5, 10, 50, 100, 200],
             paginationAddRow:"table",
+            layout: "fitColumns",
             rowClick: function(e, row) {
-                if (!dataTable.isRowClickDisabled) {
-                    dataTable.rowClicked(e, row);
+                let that = <?php echo $tableId; ?>;
+
+                if (!that.isRowClickDisabled) {
+                    that.rowClicked(e, row);
                 }
-                dataTable.isRowClickDisabled = false;
+                that.isRowClickDisabled = false;
             },
             cellEditing:function(cell){
-                dataTable.invalidRow = -1;
-                dataTable.rowEditingIndex = cell.getRow().getIndex();
+                let that = <?php echo $tableId; ?>;
+
+                that.invalidRow = -1;
+                that.rowEditingIndex = cell.getRow().getIndex();
             },
             cellEdited: function(cell) {
-                if (cell.getRow().getIndex() == dataTable.invalidRow) {
-                    dataTable.invalidRow = -1;
+                let that = <?php echo $tableId; ?>;
+
+                if (cell.getRow().getIndex() == that.invalidRow) {
+                    that.invalidRow = -1;
                 }
 
-                dataTable.cellEdited(cell);
+                that.cellEdited(cell);
 
                 $(cell.getRow().getElement()).css({
                     "background-color": "#feffb0"
                 });
             },
             rowDeleted: function(row) {
-                if (row.getIndex() == dataTable.invalidRow) {
-                    dataTable.invalidRow = -1;
+                let that = <?php echo $tableId; ?>;
+
+                if (row.getIndex() == that.invalidRow) {
+                    that.invalidRow = -1;
                 }
             },
             validationFailed:function(cell, value, validators){
-                dataTable.invalidRow = cell.getRow().getIndex();
+                let that = <?php echo $tableId; ?>;
+                that.invalidRow = cell.getRow().getIndex();
+                that.validationFailed(cell);
             },
         }),
         setColumns(columns) {
@@ -55,10 +74,12 @@
             return this.tabulator.getData();
         },
         deleteRow(index) {
-            if (index == dataTable.invalidRow) {
-                dataTable.invalidRow = -1;
+            let that = <?php echo $tableId; ?>;
+
+            if (index == that.invalidRow) {
+                that.invalidRow = -1;
             }
-            dataTable.tabulator.deleteRow(index);
+            that.tabulator.deleteRow(index);
         },
         rowClicked() {
 
@@ -66,24 +87,28 @@
         cellEdited(cell) {
 
         },
+        validationFailed(cell) {
+
+        },
         preventRowClick() {
             this.isRowClickDisabled = true;
         },
         hide() {
-            $("#data-table").css("visibility", "hidden");
+            $("#<?php echo $tableId; ?>").css("visibility", "hidden");
         },
         show() {
-            $("#data-table").css("visibility", "visible");
+            $("#<?php echo $tableId; ?>").css("visibility", "visible");
         },
         autocomplete(options = {
-            field   : '',
-            route   : '',
-            result  : {},
-            selected: {}
+            field        : '',
+            displayResult: '',
+            route        : '',
+            result       : {},
+            selected     : {}
         }) {
             let that = this;;
 
-            $("#data-table").on('focus', '.tabulator-cell', function() {
+            $("#<?php echo $tableId; ?>").on('focus', '.tabulator-cell', function() {
                 let field = $(this).attr('tabulator-field');
 
                 if (field != options.field) {
@@ -104,7 +129,7 @@
                         return {
                             suggestions: $.map(response.values, function(dataItem) {
                                 return {
-                                    value: dataItem[field],
+                                    value: dataItem[options.displayResult],
                                     data: options.result(dataItem)
                                 };
                             })
@@ -136,15 +161,44 @@
             }
             initial['id'] = index;
             items.push(initial);
+            this.gotoLastPage();
+        },
+        addData(data, isOnTop) {
+            this.tabulator.addData(data, isOnTop);
+            this.gotoLastPage();
+        },
+        gotoLastPage() {
             this.tabulator.setPage(this.tabulator.getPageMax());
             this.tabulator.setPage(this.tabulator.getPageMax());
         },
-        getRowEditingIndex()
-        {
+        getRowEditingIndex() {
             return this.rowEditingIndex;
         },
         hasValidationError() {
-            return dataTable.invalidRow > -1;
+            let that = <?php echo $tableId; ?>;
+
+            return that.invalidRow > -1;
+        },
+        deleteIcon: function(cell, formatterParams){
+            return "<i class='fa fa-times color-red'></i>";
+        },
+        arrowLeftIcon: function(cell, formatterParams){
+            return "<i class='control-icon fa fa-arrow-left'></i>";
+        },
+        headerWithPencilIcon(title) {
+            return "<i class=\"fa fa-pencil\" aria-hidden=\"true\"></i> " + title;
+        },
+        findColumnIndexByField(key, columns) {
+            for (let i = columns.length - 1; i >= 0; i--) {
+                if (columns[i].hasOwnProperty("field") && columns[i].field == key) {
+                    return i;
+                }
+            }
+
+            return -1;
+        },
+        getSelectedData() {
+            return this.tabulator.getSelectedData();
         }
     };
 </script>

@@ -18,8 +18,12 @@ function databaseConnect()
     return $connection;
 }
 
-function getData($sql)
+function getData($sql, $printCommand = false)
 {
+    if ($printCommand) {
+        die('<pre>'.$sql.'<pre>');
+    }
+
     $connection = databaseConnect();
 
     $result = mysqli_query($connection, $sql);
