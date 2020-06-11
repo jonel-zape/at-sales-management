@@ -107,6 +107,10 @@ class Sales extends Invoice
             return errorResponse(['Invalid date returned input.']);
         }
 
+        if (!is_array(post('detail')) || count(post('detail')) < 1) {
+            return errorResponse(['Can not save emtpy detail.']);
+        }
+
         $details = [];
         foreach (post('detail') as $key => $value) {
             $detail = [
@@ -178,8 +182,8 @@ class Sales extends Invoice
 
         $transaction = [
             'is_returned'  => true,
-            'status'       => SALES_DRAFT,
-            'status_class' => 'draft'
+            'status'       => SALES_NEW,
+            'status_class' => 'new'
         ];
 
         if (count($data) > 0) {

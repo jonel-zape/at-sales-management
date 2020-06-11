@@ -15,7 +15,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12" align="right">
-                            <span class="badge badge-invoice-status" id="status"></span>
+                            <span class="badge badge-invoice-status" id="status">New</span>
                         </div>
                     </div>
                     <div class="row">

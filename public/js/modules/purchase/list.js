@@ -41,6 +41,18 @@ let list = {
                 width    : 40
             },
             {
+                formatter: function(cell, formatterParams){
+                    if (cell.getRow().getData().status == 'Received') {
+                        return '<i class="fa fa-circle purchase-received" aria-hidden="true"></i>';
+                    }
+                    return '<i class="fa fa-circle purchase-unreceived" aria-hidden="true"></i>';
+                },
+                field     : "status",
+                align     : "center",
+                headerSort: false,
+                width     : 40
+            },
+            {
                 title    : "Invoice Number",
                 field    : "invoice_number",
                 formatter: "plaintext",
@@ -78,13 +90,6 @@ let list = {
                 formatter: "money",
                 align    : "right",
                 width    : 150
-            },
-            {
-                title    : "Status",
-                field    : "status",
-                formatter: "plaintext",
-                align    : "center",
-                width    : 170
             },
             {
                 formatter : deleteIcon,

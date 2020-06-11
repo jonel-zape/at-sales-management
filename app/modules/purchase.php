@@ -1,6 +1,7 @@
 <?php
 
 require 'invoice.php';
+require 'enums.php';
 
 class Purchase extends Invoice
 {
@@ -41,19 +42,35 @@ class Purchase extends Invoice
 
         $data = getData(
             'SELECT
-                P.`id`,
-                P.`invoice_number`,
-                DATE(P.`transaction_date`) AS `transaction_date`,
-                P.`memo`,
-                SUM(COALESCE(D.`qty`, 0)) AS `quantity`,
-                0 AS `remaining_quantity`,
-                SUM(COALESCE(D.`qty`, 0) * COALESCE(D.`cost_price`, 0)) AS `amount`,
-                IF (P.`received_at` IS NULL, \'Uncreceived\', \'Received\') AS `status`
-            FROM `purchase` AS P 
-            LEFT JOIN `purchase_detail` AS D ON D.`transaction_id` = P.`id`
-            WHERE P.`deleted_at` IS NULL
-            '.$filter.'
-            GROUP BY P.`id`'
+                H.`id`,
+                H.`invoice_number`,
+                H.`transaction_date`,
+                H.`memo`,
+                SUM(H.`quantity`) AS `quantity`,
+                SUM(H.`amount`) AS `amount`,
+                H.`status`,
+                SUM(H.`quantity`) - (SUM(H.`sold_quantity`) + SUM(H.`damaged_quantity`)) AS `remaining_quantity`
+            FROM
+            (
+                SELECT
+                    P.`id`,
+                    P.`invoice_number`,
+                    DATE(P.`transaction_date`) AS `transaction_date`,
+                    P.`memo`,
+                    COALESCE(D.`qty`, 0) AS `quantity`,
+                    COALESCE(D.`qty`, 0) * COALESCE(D.`cost_price`, 0) AS `amount`,
+                    IF (P.`received_at` IS NULL, \'Uncreceived\', \'Received\') AS `status`,
+                    SUM(IF(S.`deleted_at` IS NULL AND S.returned_at IS NULL, COALESCE(SD.`qty`, 0), 0)) AS `sold_quantity`,
+                    SUM(IF(S.`deleted_at` IS NULL AND S.returned_at IS NOT NULL, COALESCE(SD.`qty_damage`, 0), 0)) AS `damaged_quantity`
+                FROM `purchase` AS P 
+                LEFT JOIN `purchase_detail` AS D ON D.`transaction_id` = P.`id`
+                LEFT JOIN `sales_detail` AS SD ON SD.`purchase_detail_id` = D.`id`
+                LEFT JOIN `sales` AS S ON S.`id` = SD.`transaction_id`
+                WHERE P.`deleted_at` IS NULL
+                '.$filter.'
+                GROUP BY D.`id`
+            ) AS H
+            GROUP BY H.id'
         );
 
         if (count($data) > 0) {
@@ -187,22 +204,31 @@ class Purchase extends Invoice
             $id = 0;
         }
 
+        $filterSellable = get('filterSellable');
+        if ($filterSellable != null) {
+            $filterSellable = 'HAVING remaining_qty > 0';
+        }
+
         $data = getData(
             'SELECT COALESCE(DATE(received_at), 0) AS received_at, `memo`, `invoice_number` FROM `purchase` WHERE id = '.$id
         );
 
         $transaction = [
-            'is_received'    => true,
+            'is_received'    => false,
             'received_at'    => '',
             'memo'           => '',
-            'invoice_number' => ''
+            'invoice_number' => '',
+            'status'         => PURCHASE_NEW,
+            'status_class'   => 'new'
         ];
 
         if (count($data) > 0) {
-            $transaction['is_received']    = $data[0]['received_at'] == 0;
+            $transaction['is_received']    = $data[0]['received_at'] != 0;
             $transaction['received_at']    = $data[0]['received_at'];
             $transaction['memo']           = $data[0]['memo'];
             $transaction['invoice_number'] = $data[0]['invoice_number'];
+            $transaction['status']       = $data[0]['received_at'] == 0 ? PURCHASE_UNRECEIVED : PURCHASE_RECEIVED;
+            $transaction['status_class'] = $data[0]['received_at'] == 0 ? 'unreceived' : 'received';
         }
 
         $details = getData('
@@ -214,10 +240,12 @@ class Purchase extends Invoice
                 '.roundNumberSql('PR.`sold`', 'sold').',
                 '.roundNumberSql('PR.`rts`', 'rts').',
                 '.roundNumberSql('PR.`qty_damage`', 'qty_damage').',
-                '.roundNumberSql('PR.`qty` - PR.`sold`', 'remaining_qty').',
+                '.roundNumberSql('PR.`qty` - (PR.`sold` + PR.`qty_damage`)', 'remaining_qty').',
                 '.roundNumberSql('PR.`sold`', 'min_quantity').',
                 '.roundNumberSql('PR.`qty_damage` * PR.`cost_price`', 'lost_amount').',
                 '.roundNumberSql('PR.`cost_price`', 'cost_price').',
+                '.roundNumberSql('PR.`qty` * PR.`selling_price`', 'selling_amount').',
+                1 AS `input_qty`,
                 PR.`remark`,
                 PR.`product_id`,
                 PR.`stock_no`,
@@ -249,7 +277,7 @@ class Purchase extends Invoice
                 INNER JOIN `product` AS PRDCT ON PRDCT.`id` = PD.`product_id`
                 WHERE PD.`transaction_id` = '.$id.'
                 GROUP BY PD.`id`
-            ) AS PR');
+            ) AS PR '.$filterSellable);
 
         return successfulResponse([
             'transaction' => $transaction,
@@ -265,17 +293,31 @@ class Purchase extends Invoice
 
         $keyword = $request['keyword'];
 
-        $data = getData('
-            SELECT
-                `id`,
-                `invoice_number`
-            FROM `purchase`
-            WHERE
-                `received_at` IS NOT NULL
-                AND `deleted_at` IS NULL
-                AND `invoice_number` LIKE \'%'.$keyword.'%\'
-            LIMIT 10
-        ');
+        $data = getData(
+            'SELECT
+                H.`id`,
+                H.`invoice_number`,
+                SUM(H.`quantity`) - (SUM(H.`sold_quantity`) + SUM(H.`damaged_quantity`)) AS `remaining_quantity`
+            FROM
+            (
+                SELECT
+                    P.`id`,
+                    P.`invoice_number`,
+                    COALESCE(D.`qty`, 0) AS `quantity`,
+                    SUM(IF(S.`deleted_at` IS NULL AND S.returned_at IS NULL, COALESCE(SD.`qty`, 0), 0)) AS `sold_quantity`,
+                    SUM(IF(S.`deleted_at` IS NULL AND S.returned_at IS NOT NULL, COALESCE(SD.`qty_damage`, 0), 0)) AS `damaged_quantity`
+                FROM `purchase` AS P 
+                LEFT JOIN `purchase_detail` AS D ON D.`transaction_id` = P.`id`
+                LEFT JOIN `sales_detail` AS SD ON SD.`purchase_detail_id` = D.`id`
+                LEFT JOIN `sales` AS S ON S.`id` = SD.`transaction_id`
+                WHERE P.`deleted_at` IS NULL AND P.`received_at` IS NOT NULL
+                AND P.`invoice_number` LIKE \'%'.$keyword.'%\'
+                GROUP BY D.`id`
+            ) AS H
+            GROUP BY H.id
+            HAVING remaining_quantity > 0
+            LIMIT 10'
+        );
 
         if (count($data) > 0) {
             return successfulResponse($data);
@@ -283,6 +325,4 @@ class Purchase extends Invoice
 
         return successfulResponse([['id' => 0, 'invoice_number' => 'No results found for \''.$keyword.'\'']]);
     }
-
-
 }

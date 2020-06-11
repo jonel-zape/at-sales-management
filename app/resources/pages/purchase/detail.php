@@ -14,6 +14,11 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-12" align="right">
+                            <span class="badge badge-invoice-status" id="status">New</span>
+                        </div>
+                    </div>
+                    <div class="row">
                         <input type="hidden" id="id" value="<?php echo $moduleParameter['id']; ?>">
                         <div class="col-md-6 margin-bottom-15">
                             <label for="invoice_number" class="control-label">Invoice No.</label>
@@ -111,6 +116,10 @@
                                 <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                 Save
                             </button>
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#sell-modal" onclick="detail.loadSalesModal()">
+                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                Sell Item(s)
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -119,4 +128,63 @@
     </div>
 </div>
 
+<div class="modal fade" id="sell-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-md-12 margin-bottom-15">
+                        <?php component('alert.php', ['id' => 'alertModal']) ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 margin-bottom-15">
+                        <label for="sales-transaction_id" class="control-label">Transaction ID</label>
+                        <input type="text" class="form-control no-margin" id="sales_transaction_id">
+                    </div>
+                    <div class="col-md-6 margin-bottom-15">
+                        <label for="sales_transaction_date" class="control-label">Date</label>
+                        <?php
+                            component(
+                                'dateInput.php',
+                                [
+                                    'id'    => 'sales_transaction_date',
+                                    'value' => getDateToday(),
+                                    'class' => 'form-control no-margin'
+                                ]
+                            );
+                        ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 margin-bottom-15">
+                        <label for="sales_memo">Memo</label>
+                        <textarea class="form-control" rows="3" id="sales_memo"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 margin-bottom-10">
+                        <?php component('dataTable.php', ['id' => 'salesTable']); ?>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="buttonCloseModal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-default" onclick="detail.loadSalesModal()">
+                    <i class="fa fa-undo" aria-hidden="true"></i>
+                    Reset Items
+                </button>
+                <button type="button" class="btn btn-primary" onclick="detail.sellItems()">
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                    Sell
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="/js/modules/purchase/detail.js"></script>
+

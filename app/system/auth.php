@@ -10,3 +10,13 @@ function isAuthenticated()
 
     return false;
 }
+
+function isAuthenticatedJson()
+{
+    $headers = getallheaders();
+    if (isset($headers['X-USER-TOKEN']) && $_SESSION['token']) {
+        return $headers['X-USER-TOKEN'] == $_SESSION['token'];
+    }
+
+    return false;
+}

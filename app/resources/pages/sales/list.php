@@ -51,6 +51,19 @@
                 <?php component('alert.php') ?>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12 margin-bottom-5">
+                <div class="panel panel-info legends">
+                    <div class="panel-heading">
+                        <i class="fa fa-circle sales-sold" aria-hidden="true"></i>
+                        <span>Sold</span>
+                        &nbsp;&nbsp;
+                        <i class="fa fa-circle sales-rts" aria-hidden="true"></i>
+                        <span>Returned to Seller</span>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row  margin-bottom-15">
             <div class="col-md-12">
                 <?php component('dataTable.php'); ?>

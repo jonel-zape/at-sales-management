@@ -162,7 +162,6 @@ let detail = {
         }
 
         loading.show();
-        let that= this;
 
         http.post(
             '/sales/save',
@@ -337,6 +336,11 @@ let detail = {
             el.show("#returned_at_container");
         } else {
             el.hide("#returned_at_container");
+        }
+
+        if (el.val("#returned_at") == "") {
+            let dateNow = new Date();
+            $("#returned_at").val(`${dateNow.getFullYear()}-${dateNow.getMonth() + 1}-${dateNow.getDate()}`);
         }
     },
 

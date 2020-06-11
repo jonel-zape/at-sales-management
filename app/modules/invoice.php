@@ -94,14 +94,14 @@ abstract class Invoice
                 FROM '.$this->tableDetail.'
                 WHERE
                     `transaction_id` = '.$transactionId.'
-                    AND `id` NOT IN ('.implode($ids, ',').')');
+                    AND `id` NOT IN ('.implode(',', $ids).')');
 
             $deletes = [];
             foreach ($data as $key => $value) {
                 $deletes[] = $value['id'];
             }
             if (count($deletes) > 0) {
-                executeQuery('DELETE FROM '.$this->tableDetail.' WHERE `id` IN ('.implode($deletes, ',').')');
+                executeQuery('DELETE FROM '.$this->tableDetail.' WHERE `id` IN ('.implode(',', $deletes).')');
             }
 
             // Insert
