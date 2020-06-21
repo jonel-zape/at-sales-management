@@ -140,7 +140,7 @@
             </div>
 
             <div class="col-md-6 margin-bottom-15">
-                <div class="panel panel-warning">
+                <div class="panel panel-info">
                     <div class="panel-heading" id="notification-header">Notification for June 2020</div>
                     <ul class="list-group">
                         <li class="list-group-item">
