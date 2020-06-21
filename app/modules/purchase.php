@@ -70,7 +70,7 @@ class Purchase extends Invoice
                 '.$filter.'
                 GROUP BY D.`id`
             ) AS H
-            GROUP BY H.id'
+            GROUP BY H.id ORDER BY H.id DESC'
         );
 
         if (count($data) > 0) {

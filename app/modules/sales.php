@@ -55,7 +55,7 @@ class Sales extends Invoice
             LEFT JOIN `sales_detail` AS D ON D.`transaction_id` = H.`id`
             WHERE H.`deleted_at` IS NULL
             '.$filter.'
-            GROUP BY H.`id`'
+            GROUP BY H.`id` ORDER BY H.id DESC'
         );
 
         if (count($data) > 0) {

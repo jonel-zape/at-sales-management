@@ -37,7 +37,8 @@ let list = {
             {
                 formatter: "rownum",
                 align    : "center",
-                width    : 40
+                width    : 40,
+                resizable: false
             },
             {
                 title    : "Stock No.",
@@ -62,21 +63,24 @@ let list = {
                 field    : "cost_price",
                 formatter: "money",
                 align    : "right",
-                width    : 150
+                width    : 150,
+                resizable: false
             },
             {
                 title    : "Selling Price",
                 field    : "selling_price",
                 formatter:"money",
                 align    : "right",
-                width    : 150
+                width    : 150,
+                resizable: false
             },
             {
                 title    : "Wholesale Price",
                 field    : "wholesale_price",
                 formatter: "money",
                 align    : "right",
-                width    : 150
+                width    : 150,
+                resizable: false
             },
             {
                 title: "Memo",
@@ -86,6 +90,7 @@ let list = {
             {
                 formatter : deleteIcon,
                 width     : 40,
+                resizable : false,
                 align     : "center",
                 headerSort: false,
                 cellClick : function(e, cell){ that.delete(e, cell); }
