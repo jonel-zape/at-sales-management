@@ -69,32 +69,6 @@
             </div>
         </div>
         <h1>System Data</h1>
-        <p>Backup and Restore</p>
-        <div class="row">
-            <div class="col-md-3 margin-bottom-15">
-                <label for="input_file" class="control-label">Select Backup File</label>
-                <input type="file" class="form-control no-margin" id="input_file" value="">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-3 margin-bottom-15">
-                <label for="password_backup_restore" class="control-label">Password</label>
-                <input type="password" class="form-control no-margin" id="password_backup_restore" value="">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 margin-bottom-15">
-                <button type="reset" class="btn btn-default">
-                    <i class="fa fa-database" aria-hidden="true"></i>
-                    Backup
-                </button>
-                <button type="reset" class="btn btn-default">
-                    <i class="fa fa-undo" aria-hidden="true"></i>
-                    Restore
-                </button>
-            </div>
-        </div>
-        <br>
         <p>Clear Data</p>
         <p class="help-block">Clear all data except user accounts.</p>
         <p class="help-block">* This feature will remove after user acceptance testing</p>

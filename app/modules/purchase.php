@@ -325,4 +325,33 @@ class Purchase extends Invoice
 
         return successfulResponse([['id' => 0, 'invoice_number' => 'No results found for \''.$keyword.'\'']]);
     }
+
+    public function salesTransaction()
+    {
+        $request = escapeString([
+            'purchase_detail_id' => get('purchase_detail_id'),
+        ]);
+
+        $data = getData(
+            'SELECT
+                S.id AS sales_id,
+                S.invoice_number,
+                DATE(S.transaction_date) transaction_date,
+                IF (S.returned_at IS NOT NULL, 0, SD.qty) AS qty_sold,
+                IF (S.returned_at IS NOT NULL, SD.qty - SD.qty_damage, 0) AS qty_returned,
+                IF (S.returned_at IS NOT NULL, SD.qty_damage, 0) AS qty_damaged,
+                IF (S.returned_at IS NOT NULL, \'rts\', \'sold\') AS sales_status
+            FROM purchase_detail AS PD
+            LEFT JOIN sales_detail AS SD ON SD.purchase_detail_id = PD.id
+            LEFT JOIN sales AS S ON S.id = SD.transaction_id
+            WHERE PD.id = '.$request['purchase_detail_id'].' AND S.id IS NOT NULL
+            ORDER BY S.transaction_date DESC'
+        );
+
+        if (count($data) > 0) {
+            return successfulResponse($data);
+        }
+
+        return errorResponse(['No sales found.']);
+    }
 }

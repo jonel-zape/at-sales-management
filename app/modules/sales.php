@@ -198,30 +198,50 @@ class Sales extends Invoice
             }
         }
 
-        $details = getData('
-            SELECT
-                SD.`id` AS `detail_id`,
-                P.`short_name`,
-                P.`stock_no`,
-                PH.`invoice_number` AS `purchase_invoice_number`,
-                SD.`transaction_id`,
-                SD.`purchase_detail_id`,
-                '.roundNumberSql('SD.`qty_damage`', 'qty_damage').',
-                '.roundNumberSql('SD.`qty`', 'quantity').',
-                '.roundNumberSql('(PD.`qty` - SD.`qty`) - SUM(IF(S.`id` IS NULL, 0, COALESCE(SD1.`qty`, 0))) + SD.`qty`', 'max_quantity').',
-                '.roundNumberSql('(PD.`qty` - SD.`qty`) - SUM(IF(S.`id` IS NULL, 0, COALESCE(SD1.`qty`, 0)))', 'available_quantity').',
-                '.roundNumberSql('SD.`selling_price`', 'selling_price').',
-                '.roundNumberSql('SD.qty * SD.`selling_price`', 'amount').',
-                SD.`remark`
-            FROM `sales_detail` AS SD
-            INNER JOIN `purchase_detail` AS PD ON SD.`purchase_detail_id` = PD.`id`
-            INNER JOIN `purchase` AS PH ON PH.`id` = PD.`transaction_id`
-            LEFT JOIN `product` AS P ON P.`id` = PD.`product_id`
-            LEFT JOIN `sales_detail` AS SD1 ON SD1.`purchase_detail_id` = PD.`id` AND SD1.`transaction_id` <> '.$id.'
-            LEFT JOIN `sales` AS S ON S.`id` = SD1.`transaction_id` AND S.`returned_at` IS NULL AND S.`deleted_at` IS NULL
-            WHERE SD.`transaction_id` = '.$id.'
-            GROUP BY SD.`id`
-        ');
+        $details = getData(
+            'SELECT
+                detail_id,
+                short_name,
+                stock_no,
+                purchase_invoice_number,
+                purchase_id,
+                transaction_id,
+                purchase_detail_id,
+                qty_damage,
+                quantity,
+                max_quantity,
+                IF (is_returned = 1, available_quantity + quantity, available_quantity) AS available_quantity,
+                selling_price,
+                amount,
+                remark
+            FROM (
+                SELECT
+                    SD.`id` AS `detail_id`,
+                    P.`short_name`,
+                    P.`stock_no`,
+                    PH.`invoice_number` AS `purchase_invoice_number`,
+                    PH.`id` AS purchase_id,
+                    SD.`transaction_id`,
+                    SD.`purchase_detail_id`,
+                    '.roundNumberSql('SD.`qty_damage`', 'qty_damage').',
+                    '.roundNumberSql('SD.`qty`', 'quantity').',
+                    '.roundNumberSql('(PD.`qty` - SD.`qty`) - SUM(IF(S.`id` IS NULL, 0, COALESCE(SD1.`qty`, 0))) + SD.`qty`', 'max_quantity').',
+                    '.roundNumberSql('(PD.`qty` - SD.`qty`) - SUM(IF(S.`id` IS NULL, 0, COALESCE(SD1.`qty`, 0)))', 'available_quantity').',
+                    '.roundNumberSql('SD.`selling_price`', 'selling_price').',
+                    '.roundNumberSql('SD.qty * SD.`selling_price`', 'amount').',
+                    SD.`remark`,
+                    IF (S1.`returned_at` IS NOT NULL, 1, 0) AS `is_returned`
+                FROM `sales_detail` AS SD
+                INNER JOIN `purchase_detail` AS PD ON SD.`purchase_detail_id` = PD.`id`
+                INNER JOIN `purchase` AS PH ON PH.`id` = PD.`transaction_id`
+                LEFT JOIN `product` AS P ON P.`id` = PD.`product_id`
+                LEFT JOIN `sales_detail` AS SD1 ON SD1.`purchase_detail_id` = PD.`id` AND SD1.`transaction_id` <> '.$id.'
+                LEFT JOIN `sales` AS S ON S.`id` = SD1.`transaction_id` AND S.`returned_at` IS NULL AND S.`deleted_at` IS NULL
+                LEFT JOIN `sales` AS S1 ON S1.id = SD.transaction_id
+                WHERE SD.`transaction_id` = '.$id.'
+                GROUP BY SD.`id`
+            ) AS A'
+        );
 
         return successfulResponse([
             'transaction' => $transaction,

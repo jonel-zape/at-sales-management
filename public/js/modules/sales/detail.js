@@ -14,6 +14,15 @@ let detail = {
             width    : 170,
         },
         {
+            formatter: function(cell, formatterParams){
+                return "<i class='fa fa-external-link' aria-hidden='true' title='View Purchase'></i>";
+            },
+            width    : 40,
+            align    : "center",
+            headerSort: false,
+            cellClick: function(e, cell){ detail.gotPurchase(e, cell); }
+        },
+        {
             title    : "Stock No",
             field    : "stock_no",
             formatter: "plaintext",
@@ -35,20 +44,6 @@ let detail = {
             validator: ["min:0", "numeric", "required"]
         },
         {
-            title    : dataTable.headerWithPencilIcon("Damaged Qty."),
-            field    : "qty_damage",
-            width    : 150,
-            visible  : false,
-            editor   : "input",
-            formatter: "money",
-            align    : "right",
-            validator: ["min:0", "integer", "required", {
-                type: function(cell, value, parameters) {
-                    return parseFloat(value) <= parseFloat(cell.getRow().getData().quantity);
-                }
-            }]
-        },
-        {
             title    : dataTable.headerWithPencilIcon("Quantity"),
             field    : "quantity",
             width    : 150,
@@ -58,6 +53,20 @@ let detail = {
             validator: ["min:1", "integer", "required", {
                 type: function(cell, value, parameters) {
                     return parseFloat(value) <= parseFloat(cell.getRow().getData().max_quantity);
+                }
+            }]
+        },
+        {
+            title    : dataTable.headerWithPencilIcon("Damaged Qty."),
+            field    : "qty_damage",
+            width    : 150,
+            visible  : false,
+            editor   : "input",
+            formatter: "money",
+            align    : "right",
+            validator: ["min:0", "integer", "required", {
+                type: function(cell, value, parameters) {
+                    return parseFloat(value) <= parseFloat(cell.getRow().getData().quantity) && parseFloat(value) <= parseFloat(cell.getRow().getData().available_quantity);
                 }
             }]
         },
@@ -216,7 +225,8 @@ let detail = {
                     break;
                 case "qty_damage":
                     let quantity = parseFloat(that.products[index].quantity);
-                    alert.error(["Returned quantity must be a positive numeric and cannot be exceeded to ordered quantity (" + quantity + ")."]);
+                    let availableAuantity = parseFloat(that.products[index].available_quantity);
+                    alert.error(["Returned quantity must be a positive numeric and cannot be exceeded to ordered quantity (" + quantity + ") and available quantity (" + availableAuantity + ")."]);
                     break;
             }
         };
@@ -229,7 +239,12 @@ let detail = {
         let maxQuantity = parseFloat(this.products[index].max_quantity);
         let qtyDamage = parseFloat(this.products[index].qty_damage);
 
-        this.products[index].available_quantity = maxQuantity - quantity;
+        let availableQty = maxQuantity - quantity;
+        if (availableQty < 1) {
+            availableQty = 0;
+        }
+
+        this.products[index].available_quantity = availableQty;
 
         if (qtyDamage > quantity) {
             this.products[index].qty_damage = quantity;
@@ -271,12 +286,19 @@ let detail = {
     },
 
     transactionReturnedToSeller() {
-        if (!isReturned) {
+        if (isReturned == 'false') {
             return;
         }
 
         let index = dataTable.findColumnIndexByField("qty_damage", this.columns);
         this.columns[index].visible = true;
+
+        index = dataTable.findColumnIndexByField("quantity", this.columns);
+        this.columns[index].title = dataTable.headerWithPencilIcon("Returned Qty.");
+
+        index = dataTable.findColumnIndexByField("available_quantity", this.columns);
+        this.columns[index].visible = false;
+        this.columns[index - 1].visible = false;
 
         dataTable.setColumns(this.columns);
     },
@@ -308,7 +330,18 @@ let detail = {
 
         let index = cell.getRow().getIndex();
 
-        this.products[index].quantity = parseFloat(this.products[index].quantity) + parseFloat(this.products[index].available_quantity);
+        if (parseFloat(this.products[index].available_quantity) < 1) {
+            alert.error(['No available quantity.']);
+            return;
+        }
+
+        let maxQuantity = parseFloat(cell.getRow().getData().max_quantity);
+        if (parseFloat(cell.getRow().getData().quantity) + parseFloat(cell.getRow().getData().available_quantity) > maxQuantity) {
+            alert.error(['Available quantity is not enough.']);
+            return;
+        }
+
+        this.products[index].quantity = parseFloat(cell.getRow().getData().quantity) + parseFloat(cell.getRow().getData().available_quantity);
         this.products[index].available_quantity = 0;
 
         this.computeAmount(cell);
@@ -420,6 +453,12 @@ let detail = {
         this.getSummary();
 
         $("#buttonCloseModal").click();
+    },
+
+    gotPurchase(e, cell) {
+        loading.show();
+        let id = cell.getRow().getData().purchase_id;
+        window.location = `/purchase/edit/${id}`;
     }
 };
 

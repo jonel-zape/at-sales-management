@@ -2,7 +2,7 @@
 --
 -- Host: 127.0.0.1    Database: atsm
 -- ------------------------------------------------------
--- Server version 5.7.29-log
+-- Server version	5.7.29-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,6 +14,32 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `failed_login`
+--
+
+DROP TABLE IF EXISTS `failed_login`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `failed_login` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `username_used` varchar(45) DEFAULT NULL,
+  `password_used` varchar(45) DEFAULT NULL,
+  `date_time` datetime DEFAULT NULL,
+  `other_info` varchar(512) DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `failed_login`
+--
+
+LOCK TABLES `failed_login` WRITE;
+/*!40000 ALTER TABLE `failed_login` DISABLE KEYS */;
+/*!40000 ALTER TABLE `failed_login` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `product`
@@ -68,6 +94,8 @@ CREATE TABLE `purchase` (
   `transaction_date` datetime DEFAULT NULL,
   `memo` varchar(1024) DEFAULT '',
   `received_at` datetime DEFAULT NULL,
+  `paid_amount` decimal(23,6) DEFAULT '0.000000',
+  `paid_at` datetime DEFAULT NULL,
   `created_by` bigint(20) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_by` bigint(20) DEFAULT NULL,
@@ -77,7 +105,8 @@ CREATE TABLE `purchase` (
   KEY `ix_deleted_at` (`deleted_at`),
   KEY `ix_invoice_number` (`invoice_number`),
   KEY `ix_received_at` (`received_at`),
-  KEY `ix_status_deleted_at` (`deleted_at`)
+  KEY `ix_status_deleted_at` (`deleted_at`),
+  KEY `ix_transaction_date` (`transaction_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -142,7 +171,8 @@ CREATE TABLE `sales` (
   PRIMARY KEY (`id`),
   KEY `ix_invoice_number` (`invoice_number`),
   KEY `ix_deleted_at` (`deleted_at`),
-  KEY `ix_returned_at` (`returned_at`)
+  KEY `ix_returned_at` (`returned_at`),
+  KEY `ix_transaction_date` (`transaction_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -211,7 +241,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'test user','user1','$2y$10$CPFK.xlrnA8G1nMKoUQXE.kDp4eGwp5.0EzQFuP0ngqiQ3t.CsOcm','2019-12-15 21:22:54','2019-12-15 21:22:54',NULL),(2,'test user 2','user2','124','2019-12-15 21:22:54','2019-12-15 21:22:54',NULL);
+INSERT INTO `user` VALUES (1,'test user','user1','$2y$10$vKYwy/VgmgMTYFluvFJhdu0HuvYejNLTD83dbcwNffQejoniu1Ika','2019-12-15 21:22:54','2019-12-15 21:22:54',NULL),(2,'test user 2','user2','124','2019-12-15 21:22:54','2019-12-15 21:22:54',NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -224,4 +254,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-01 20:25:46
+-- Dump completed on 2020-06-21 10:31:26

@@ -194,6 +194,10 @@
     let autocompletePurchaseNumberSelectedId = '';
 
     $("#autocomplete-purchase-number").on('focus', function() {
+        $.ajaxSetup({
+            headers: { 'X-USER-TOKEN': window.token }
+        });
+
         $(this).autocomplete({
             serviceUrl: '/purchase/autonCompleteSearchInvoice',
             dataType: 'json',

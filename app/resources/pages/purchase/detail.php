@@ -186,5 +186,45 @@
     </div>
 </div>
 
+<button data-toggle="modal" data-target="#show-sales" style="display: none;" id="show-sales-button"></button>
+<div class="modal fade" id="show-sales" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Sales Transaction</h4>
+                <div class="row">
+                    <div class="col-md-12 margin-bottom-15">
+                        <?php component('alert.php', ['id' => 'alertModalSalesDetail']) ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 margin-bottom-5">
+                        <div class="panel panel-info legends">
+                            <div class="panel-heading">
+                                <i class="fa fa-circle sales-sold" aria-hidden="true"></i>
+                                <span>Sold</span>
+                                &nbsp;&nbsp;
+                                <i class="fa fa-circle sales-rts" aria-hidden="true"></i>
+                                <span>Returned to Seller</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 margin-bottom-10">
+                        <?php component('dataTable.php', ['id' => 'salesDetailsTable']); ?>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="/js/modules/purchase/detail.js"></script>
 

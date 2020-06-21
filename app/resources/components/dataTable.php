@@ -120,6 +120,10 @@
 
                 let originalValue = $(this).find('input').val();
 
+                $.ajaxSetup({
+                    headers: { 'X-USER-TOKEN': window.token }
+                });
+
                 $(this).find('input').autocomplete({
                     serviceUrl: options.route + '?field=' + field,
                     dataType: 'json',
@@ -180,10 +184,10 @@
             return that.invalidRow > -1;
         },
         deleteIcon: function(cell, formatterParams){
-            return "<i class='fa fa-times color-red'></i>";
+            return "<i class='fa fa-times color-red' title='Remove Item'></i>";
         },
         arrowLeftIcon: function(cell, formatterParams){
-            return "<i class='control-icon fa fa-arrow-left'></i>";
+            return "<i class='control-icon fa fa-arrow-left' title='Move All'></i>";
         },
         headerWithPencilIcon(title) {
             return "<i class=\"fa fa-pencil\" aria-hidden=\"true\"></i> " + title;

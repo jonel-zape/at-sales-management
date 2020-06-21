@@ -3,7 +3,8 @@ let detail = {
         value: false
     },
     delays: {
-        sellModal: null
+        sellModal: null,
+        salesTransaction: null
     },
     products: [],
 
@@ -70,6 +71,15 @@ let detail = {
             visible  : false
         },
         {
+            formatter: function(cell, formatterParams){
+                return "<i class='fa fa-external-link' aria-hidden='true' title='Show Transactions'></i>";
+            },
+            width    : 40,
+            align    : "center",
+            headerSort: false,
+            cellClick: function(e, cell){ detail.showSalesDetailModal(e, cell); }
+        },
+        {
             title    : "Amount",
             field    : "amount",
             width    : 100,
@@ -86,6 +96,7 @@ let detail = {
             formatter: dataTable.deleteIcon,
             width    : 40,
             align    : "center",
+            headerSort: false,
             cellClick: function(e, cell){ detail.delete(e, cell); }
         },
     ],
@@ -145,6 +156,64 @@ let detail = {
             align     : "center",
             headerSort: false,
             cellClick : function(e, cell){ detail.salesDelete(e, cell); }
+        }
+    ],
+
+    salesTransactionColumns: [
+        {
+            formatter: function(cell, formatterParams){
+                if (cell.getRow().getData().sales_status == 'sold') {
+                    return '<i class="fa fa-circle sales-sold" aria-hidden="true"></i>';
+                }
+                return '<i class="fa fa-circle sales-rts" aria-hidden="true"></i>';
+            },
+            field     : "status",
+            align     : "center",
+            headerSort: false,
+            width     : 40
+        },
+        {
+            title    : "Invoice No.",
+            field    : "invoice_number",
+            formatter: "plaintext",
+            width    : 150
+        },
+        {
+            formatter: function(cell, formatterParams){
+                return "<i class='fa fa-external-link' aria-hidden='true' title='View Sales'></i>";
+            },
+            width    : 40,
+            align    : "center",
+            headerSort: false,
+            cellClick: function(e, cell){ detail.gotoSales(e, cell); }
+        },
+        {
+            title    : "Date",
+            field    : "transaction_date",
+            width    : 100,
+            align    : "center",
+            formatter: "plaintext",
+        },
+        {
+            title    : "Sold",
+            field    : "qty_sold",
+            width    : 110,
+            formatter: "money",
+            align    : "right",
+        },
+        {
+            title    : "Returned",
+            field    : "qty_returned",
+            width    : 110,
+            formatter: "money",
+            align    : "right",
+        },
+        {
+            title    : "Damaged",
+            field    : "qty_damaged",
+            width    : 110,
+            formatter: "money",
+            align    : "right",
         }
     ],
 
@@ -317,7 +386,6 @@ let detail = {
 
         dataTable.setColumns(this.columns);
     },
-
 
     delete(e, cell) {
         let that = this;
@@ -504,6 +572,35 @@ let detail = {
             alertModal.error(response.errors);
             loading.hide();
         });
+    },
+
+    showSalesDetailModal(e, cell) {
+        loading.show();
+        let detailId = cell.getRow().getData().detail_id;
+        $("#show-sales-button").click();
+
+        http.get(
+            '/purchase/salesTransaction',
+            {
+                purchase_detail_id: detailId
+            }
+        ).done(function(response){
+            detail.delays.salesTransaction = setTimeout(function(){
+                salesDetailsTable.setColumns(detail.salesTransactionColumns);
+                salesDetailsTable.setData(response.values);
+                clearInterval(detail.delays.salesTransaction);
+                loading.hide();
+            }, 500);
+        }).catch(function(response){
+            alertModalSalesDetail.error(response.errors);
+            loading.hide();
+        });
+    },
+
+    gotoSales(e, cell) {
+        loading.show();
+        let id = cell.getRow().getData().sales_id;
+        window.location = `/sales/edit/${id}`;
     }
 };
 
