@@ -110,4 +110,4 @@
     </div>
 </div>
 
-<script src="/js/modules/home/summary.js"></script>
+<script src="/js/modules/home/summary.js<?php noCache(); ?>"></script>

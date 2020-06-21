@@ -7,25 +7,25 @@
         <meta name="description" content="" />
         <meta name="viewport" content="width=device-width">
         <link rel="icon" href="/images/logo.png">
-        <link rel="stylesheet" href="/css/templatemo_main.css">
-        <link rel="stylesheet" href="/js/lib/tabulator/css/tabulator.css">
-        <link rel="stylesheet" href="/js/lib/autocomplete/styles.css">
-        <link rel="stylesheet" href="/js/lib/datepicker/datepicker.css">
-        <link rel="stylesheet" href="/css/custom.css">
+        <link rel="stylesheet" href="/css/templatemo_main.css<?php noCache(); ?>">
+        <link rel="stylesheet" href="/js/lib/tabulator/css/tabulator.css<?php noCache(); ?>">
+        <link rel="stylesheet" href="/js/lib/autocomplete/styles.css<?php noCache(); ?>">
+        <link rel="stylesheet" href="/js/lib/datepicker/datepicker.css<?php noCache(); ?>">
+        <link rel="stylesheet" href="/css/custom.css<?php noCache(); ?>">
     </head>
     <body>
 
-    <script src="/js/lib/jquery-3.4.1.min.js"></script>
-    <script src="/js/lib/autocomplete/jquery.autocomplete.min.js"></script>
-    <script src="/js/lib/tabulator/js/tabulator.js"></script>
-    <script src="/js/template/bootstrap.min.js"></script>
-    <script src="/js/template/Chart.min.js"></script>
-    <script src="/js/template/templatemo_script.js"></script>
-    <script src="/js/lib/datepicker/datepicker.js"></script>
-    <script src="/js/core.js"></script>
-    <script src="/js/http.js"></script>
-    <script src="/js/el.js"></script>
-    <script src="/js/modules/enums.js"></script>
+    <script src="/js/lib/jquery-3.4.1.min.js<?php noCache(); ?>"></script>
+    <script src="/js/lib/autocomplete/jquery.autocomplete.min.js<?php noCache(); ?>"></script>
+    <script src="/js/lib/tabulator/js/tabulator.js<?php noCache(); ?>"></script>
+    <script src="/js/template/bootstrap.min.js<?php noCache(); ?>"></script>
+    <script src="/js/template/Chart.min.js<?php noCache(); ?>"></script>
+    <script src="/js/template/templatemo_script.js<?php noCache(); ?>"></script>
+    <script src="/js/lib/datepicker/datepicker.js<?php noCache(); ?>"></script>
+    <script src="/js/core.js<?php noCache(); ?>"></script>
+    <script src="/js/http.js<?php noCache(); ?>"></script>
+    <script src="/js/el.js<?php noCache(); ?>"></script>
+    <script src="/js/modules/enums.js<?php noCache(); ?>"></script>
 
     <?php component('loading.php'); ?>
     <?php component('modalConfirm.php'); ?>

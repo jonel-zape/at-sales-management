@@ -240,4 +240,4 @@
 
 <input type="hidden" id="id" value="<?php echo $moduleParameter['id']; ?>">
 
-<script src="/js/modules/sales/detail.js"></script>
+<script src="/js/modules/sales/detail.js<?php noCache(); ?>"></script>

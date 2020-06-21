@@ -104,4 +104,4 @@
     </div>
 </div>
 
-<script src="/js/modules/product/detail.js"></script>
+<script src="/js/modules/product/detail.js<?php noCache(); ?>"></script>

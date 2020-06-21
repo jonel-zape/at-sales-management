@@ -80,4 +80,4 @@
     </div>
 </div>
 
-<script src="/js/modules/sales/list.js"></script>
+<script src="/js/modules/sales/list.js<?php noCache(); ?>"></script>

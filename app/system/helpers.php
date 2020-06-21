@@ -202,3 +202,13 @@ function isValidDate($value, $allowEmpty = false)
 
     return false;
 }
+
+function printSystemVersion()
+{
+    echo systemVersion();
+}
+
+function noCache()
+{
+    echo '?no-cache='.systemVersion();
+}

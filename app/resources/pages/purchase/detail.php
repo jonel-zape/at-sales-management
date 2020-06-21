@@ -226,5 +226,5 @@
     </div>
 </div>
 
-<script src="/js/modules/purchase/detail.js"></script>
+<script src="/js/modules/purchase/detail.js<?php noCache(); ?>"></script>
 
