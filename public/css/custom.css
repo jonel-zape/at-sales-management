@@ -171,7 +171,8 @@
 
 .widget .widget-label{
     padding: 15px;
-    padding-top: 7px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     font-size: 10pt;
 }
 
