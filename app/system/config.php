@@ -1,5 +1,11 @@
 <?php
 
+function systemVersion()
+{
+    // Major.Minor.Fix
+    return '1.1.0';
+}
+
 function getDatabaseConfig()
 {
     return [

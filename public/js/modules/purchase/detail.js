@@ -12,7 +12,8 @@ let detail = {
         {
             formatter: "rownum",
             align    : "center",
-            width    : 40
+            width    : 40,
+            resizable: false
         },
         {
             title    : dataTable.headerWithPencilIcon("Stock No"),
@@ -32,6 +33,7 @@ let detail = {
             title    : dataTable.headerWithPencilIcon("Cost"),
             field    : "cost_price",
             width    : 90,
+            resizable: false,
             formatter: "money",
             align    : "right",
             editor   : "input",
@@ -41,6 +43,7 @@ let detail = {
             title    : dataTable.headerWithPencilIcon("Quantity"),
             field    : "quantity",
             width    : 120,
+            resizable: false,
             formatter: "money",
             align    : "right",
             editor   : "input",
@@ -50,6 +53,7 @@ let detail = {
             title    : "Remaining",
             field    : "remaining_qty",
             width    : 120,
+            resizable: false,
             formatter: "money",
             align    : "right",
             visible  : false
@@ -58,6 +62,7 @@ let detail = {
             title    : "Sold",
             field    : "min_quantity",
             width    : 120,
+            resizable: false,
             formatter: "money",
             align    : "right",
             visible  : false
@@ -66,6 +71,7 @@ let detail = {
             title    : "Damaged",
             field    : "qty_damage",
             width    : 120,
+            resizable: false,
             formatter: "money",
             align    : "right",
             visible  : false
@@ -75,6 +81,7 @@ let detail = {
                 return "<i class='fa fa-external-link' aria-hidden='true' title='Show Transactions'></i>";
             },
             width    : 40,
+            resizable: false,
             align    : "center",
             headerSort: false,
             cellClick: function(e, cell){ detail.showSalesDetailModal(e, cell); }
@@ -83,6 +90,7 @@ let detail = {
             title    : "Amount",
             field    : "amount",
             width    : 100,
+            resizable: false,
             formatter: "money",
             align    : "right",
         },
@@ -95,6 +103,7 @@ let detail = {
         {
             formatter: dataTable.deleteIcon,
             width    : 40,
+            resizable: false,
             align    : "center",
             headerSort: false,
             cellClick: function(e, cell){ detail.delete(e, cell); }
@@ -118,6 +127,7 @@ let detail = {
             title    : dataTable.headerWithPencilIcon("Price"),
             field    : "selling_price",
             width    : 120,
+            resizable: false,
             formatter: "money",
             align    : "right",
             editor   : "input",
@@ -127,6 +137,7 @@ let detail = {
             title    : dataTable.headerWithPencilIcon("Qty."),
             field    : "quantity",
             width    : 120,
+            resizable: false,
             formatter: "money",
             align    : "right",
             editor   : "input",
@@ -140,6 +151,7 @@ let detail = {
             title    : "Available Qty.",
             field    : "remaining_qty",
             width    : 150,
+            resizable: false,
             formatter: "money",
             align    : "right",
         },
@@ -147,12 +159,14 @@ let detail = {
             title    : "Amount",
             field    : "selling_amount",
             width    : 100,
+            resizable: false,
             formatter: "money",
             align    : "right",
         },
         {
             formatter : dataTable.deleteIcon,
             width     : 40,
+            resizable : false,
             align     : "center",
             headerSort: false,
             cellClick : function(e, cell){ detail.salesDelete(e, cell); }
@@ -170,7 +184,8 @@ let detail = {
             field     : "status",
             align     : "center",
             headerSort: false,
-            width     : 40
+            width     : 40,
+            resizable : false
         },
         {
             title    : "Invoice No.",
@@ -183,6 +198,7 @@ let detail = {
                 return "<i class='fa fa-external-link' aria-hidden='true' title='View Sales'></i>";
             },
             width    : 40,
+            resizable: false,
             align    : "center",
             headerSort: false,
             cellClick: function(e, cell){ detail.gotoSales(e, cell); }
@@ -191,6 +207,7 @@ let detail = {
             title    : "Date",
             field    : "transaction_date",
             width    : 100,
+            resizable: false,
             align    : "center",
             formatter: "plaintext",
         },
@@ -198,6 +215,7 @@ let detail = {
             title    : "Sold",
             field    : "qty_sold",
             width    : 110,
+            resizable: false,
             formatter: "money",
             align    : "right",
         },
@@ -205,6 +223,7 @@ let detail = {
             title    : "Returned",
             field    : "qty_returned",
             width    : 110,
+            resizable: false,
             formatter: "money",
             align    : "right",
         },
@@ -212,6 +231,7 @@ let detail = {
             title    : "Damaged",
             field    : "qty_damaged",
             width    : 110,
+            resizable: false,
             formatter: "money",
             align    : "right",
         }
@@ -496,6 +516,8 @@ let detail = {
     },
 
     loadSalesModal() {
+        el.hide(".sell-input-group");
+        alertModal.success('Loading...');
         loading.show();
         http.get(
             '/purchase/details',
@@ -504,14 +526,21 @@ let detail = {
                 filterSellable: true,
             }
         ).done(function(response){
-            detail.delays.sellModal = setInterval(function(){
+            detail.delays.sellModal = setTimeout(function(){
+                alertModal.dismiss();
                 let items = [];
                 response.values.details.forEach(function(item){
                     item.quantity = parseFloat(item.remaining_qty);
                     item.selling_amount = parseFloat(item.quantity) * parseFloat(item.selling_price);
                     items.push(item);
                 });
-                salesTable.setData(items);
+                if (response.values.details.length < 1) {
+                    alertModal.error(['No available items to sell.']);
+                    el.hide(".sell-input-group");
+                } else {
+                    el.show(".sell-input-group");
+                    salesTable.setData(items);
+                }
                 clearInterval(detail.delays.sellModal);
                 loading.hide();
             }, 500);
@@ -575,6 +604,8 @@ let detail = {
     },
 
     showSalesDetailModal(e, cell) {
+        el.hide('.sales-transaction-group');
+        alertModalSalesDetail.success('Loading...');
         loading.show();
         let detailId = cell.getRow().getData().detail_id;
         $("#show-sales-button").click();
@@ -586,12 +617,16 @@ let detail = {
             }
         ).done(function(response){
             detail.delays.salesTransaction = setTimeout(function(){
+                alertModalSalesDetail.dismiss();
+                el.show('.sales-transaction-group');
                 salesDetailsTable.setColumns(detail.salesTransactionColumns);
                 salesDetailsTable.setData(response.values);
                 clearInterval(detail.delays.salesTransaction);
                 loading.hide();
             }, 500);
         }).catch(function(response){
+            alertModalSalesDetail.dismiss();
+            el.hide('.sales-transaction-group');
             alertModalSalesDetail.error(response.errors);
             loading.hide();
         });

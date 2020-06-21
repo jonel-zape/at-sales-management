@@ -86,6 +86,12 @@
                 </button>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12 margin-bottom-15">
+                <hr/>
+                <p class="help-block">Sales Managment Version <?php printSystemVersion(); ?></p>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -115,4 +121,4 @@
     </div>
 </div>
 
-<script src="/js/modules/settings.js"></script>
+<script src="/js/modules/settings.js<?php noCache(); ?>"></script>

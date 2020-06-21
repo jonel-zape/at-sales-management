@@ -32,7 +32,8 @@ let list = {
             {
                 formatter: "rownum",
                 align    : "center",
-                width    : 40
+                width    : 40,
+                resizable: false
             },
             {
                 formatter: function(cell, formatterParams){
@@ -55,7 +56,8 @@ let list = {
                 field     : "status",
                 align     : "center",
                 headerSort: false,
-                width     : 40
+                width     : 40,
+                resizable : false
             },
             {
                 title    : "Invoice Number",
@@ -68,6 +70,7 @@ let list = {
                     return "<i class='fa fa-external-link' aria-hidden='true' title='View Purchase'></i>";
                 },
                 width    : 40,
+                resizable: false,
                 align    : "center",
                 headerSort: false,
                 cellClick: function(e, cell){ list.gotPurchase(e, cell); }
@@ -79,6 +82,7 @@ let list = {
                 align    : "right",
                 editor   : "input",
                 width    : 150,
+                resizable: false,
                 validator: ["min:0", "numeric", "required", {
                     type: function(cell, value, parameters) {
                         return parseFloat(value) <= parseFloat(cell.getRow().getData().amount_to_pay);
@@ -88,6 +92,7 @@ let list = {
             {
                 formatter : dataTable.arrowLeftIcon,
                 width     : 50,
+                resizable : false,
                 field     : "put_all",
                 align     : "center",
                 headerSort: false,
@@ -99,28 +104,32 @@ let list = {
                 field    : "amount_to_pay",
                 formatter: "money",
                 align    : "right",
-                width    : 150
+                width    : 150,
+                resizable: false,
             },
             {
                 title    : "Balance",
                 field    : "balance",
                 formatter: "money",
                 align    : "right",
-                width    : 150
+                width    : 150,
+                resizable: false,
             },
             {
-                title    : "Date Paid",
+                title    : "Date & Time Paid",
                 field    : "date_paid",
                 formatter: "plaintext",
                 align    : "center",
-                width    : 150
+                width    : 180,
+                resizable: false,
             },
             {
                 title    : "Date Purchased",
                 field    : "transaction_date",
                 formatter: "plaintext",
                 align    : "center",
-                width    : 150
+                width    : 150,
+                resizable: false,
             }
         ];
 

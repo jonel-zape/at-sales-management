@@ -36,13 +36,13 @@ class Payment {
                 '.formatNumberSql('P.paid_amount', 'paid_amount').',
                 SUM(COALESCE(D.`qty`, 0) * COALESCE(D.`cost_price`, 0)) AS `amount_to_pay`,
                 SUM(COALESCE(D.`qty`, 0) * COALESCE(D.`cost_price`, 0)) - P.paid_amount AS `balance`,
-                COALESCE(P.paid_at, \'\') AS `date_paid`,
+                COALESCE(DATE_FORMAT(P.paid_at, \'%Y-%m-%d %h:%i:%S %p\'), \'\') AS `date_paid`,
                 DATE(P.`transaction_date`) AS `transaction_date`
             FROM `purchase` AS P
             LEFT JOIN `purchase_detail` AS D ON D.`transaction_id` = P.`id`
             WHERE P.`deleted_at` IS NULL AND P.received_at IS NOT NULL
             '.$filter.'
-            GROUP BY P.`id`'.$havingFilter
+            GROUP BY P.`id`'.$havingFilter.' ORDER BY P.id DESC '
         );
 
         if (count($data) > 0) {

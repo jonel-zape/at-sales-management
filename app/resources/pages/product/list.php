@@ -43,4 +43,4 @@
     </div>
 </div>
 
-<script src="/js/modules/product/list.js"></script>
+<script src="/js/modules/product/list.js<?php noCache(); ?>"></script>

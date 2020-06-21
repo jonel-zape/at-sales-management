@@ -75,10 +75,10 @@
 
 <div id="custom-footer">
     <h4>
-        <img src="/images/logo.png" />
+        <img src="/images/logo.png<?php noCache(); ?>" />
         &nbsp;
         Sales Management for Online Selling Business
     </h4>
 </div>
 
-<script src="/js/modules/auth.js"></script>
+<script src="/js/modules/auth.js<?php noCache(); ?>"></script>

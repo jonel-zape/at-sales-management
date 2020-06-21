@@ -4,7 +4,8 @@ let list = {
         {
             formatter: "rownum",
             align    : "center",
-            width    : 40
+            width    : 40,
+            resizable: false
         },
         {
             formatter: function(cell, formatterParams){
@@ -16,7 +17,8 @@ let list = {
             field     : "status",
             align     : "center",
             headerSort: false,
-            width     : 40
+            width     : 40,
+            resizable : false
         },
         {
             title    : "Invoice Number",
@@ -34,7 +36,8 @@ let list = {
             title    : "Date",
             field    : "transaction_date",
             formatter: "plaintext",
-            width    : 120
+            width    : 120,
+            resizable: false
         },
         {
             title : "Memo",
@@ -47,18 +50,21 @@ let list = {
             field    : "quantity",
             formatter: "money",
             align    : "right",
-            width    : 150
+            width    : 150,
+            resizable: false,
         },
         {
             title    : "Amount",
             field    : "amount",
             formatter: "money",
             align    : "right",
-            width    : 150
+            width    : 150,
+            resizable: false
         },
         {
             formatter : dataTable.deleteIcon,
             width     : 40,
+            resizable : false,
             align     : "center",
             headerSort: false,
             cellClick : function(e, cell){ list.delete(e, cell); }
@@ -70,11 +76,8 @@ let list = {
     },
 
     find() {
-        //dataTable.setData(this.data);
-
         loading.show();
 
-        let that = this;
         http.get(
             '/sales/find',
             {

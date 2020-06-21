@@ -156,6 +156,9 @@ class Product
                     NOW()
                 )
             ');
+
+            $newProduct = getData('SELECT MAX(id) AS id FROM product');
+            $id = $newProduct[0]['id'];
         } else {
             executeQuery(
                 'UPDATE `product`
@@ -174,7 +177,7 @@ class Product
             );
         }
 
-        return successfulResponse('Saved.');
+        return successfulResponse(['id' => $id]);
     }
 
     private function isFieldExists($column, $value, $id)

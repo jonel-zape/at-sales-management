@@ -1,5 +1,5 @@
 let detail = {
-    save() {
+    save(saveAndNew = false) {
         loading.show();
 
         http.post(
@@ -15,8 +15,12 @@ let detail = {
                 wholesale_price: el.val("#wholesale_price")
             }
         ).done(function(response){
-            alert.success(response.values);
-            loading.hide();
+            alert.success('Saved');
+            if (saveAndNew) {
+                window.location = `/product/create`;
+            } else {
+                window.location = `/product/edit/${response.values.id}`;
+            }
         }).catch(function(response){
             alert.error(response.errors);
             loading.hide();

@@ -96,6 +96,10 @@
                                 <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                 Save
                             </button>
+                            <button type="button" class="btn btn-default" onclick="detail.save(true)">
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                Save and New
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -104,4 +108,4 @@
     </div>
 </div>
 
-<script src="/js/modules/product/detail.js"></script>
+<script src="/js/modules/product/detail.js<?php noCache(); ?>"></script>

@@ -94,6 +94,11 @@ let summary = {
                 responsive: true
             });
 
+            el.setContent("#notification-header", `Notification for ${$("#month option:selected").text()} ${$("#year option:selected").text()}`);
+            el.setContent("#amount_to_pay", response.values.notification.amount_to_pay);
+            el.setContent("#unreceived_items", response.values.notification.unreceived_items);
+            el.setContent("#unsold-items", response.values.notification.unsold_items);
+
             loading.hide();
         }).catch(function(response){
             loading.hide();

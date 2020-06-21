@@ -5,7 +5,8 @@ let detail = {
         {
             formatter: "rownum",
             align    : "center",
-            width    : 40
+            width    : 40,
+            resizable: false
         },
         {
             title    : "PO Invoice",
@@ -18,6 +19,7 @@ let detail = {
                 return "<i class='fa fa-external-link' aria-hidden='true' title='View Purchase'></i>";
             },
             width    : 40,
+            resizable: false,
             align    : "center",
             headerSort: false,
             cellClick: function(e, cell){ detail.gotPurchase(e, cell); }
@@ -38,6 +40,7 @@ let detail = {
             title    : dataTable.headerWithPencilIcon("Price"),
             field    : "selling_price",
             width    : 120,
+            resizable: false,
             formatter: "money",
             align    : "right",
             editor   : "input",
@@ -47,6 +50,7 @@ let detail = {
             title    : dataTable.headerWithPencilIcon("Quantity"),
             field    : "quantity",
             width    : 150,
+            resizable: false,
             formatter: "money",
             align    : "right",
             editor   : "input",
@@ -60,6 +64,7 @@ let detail = {
             title    : dataTable.headerWithPencilIcon("Damaged Qty."),
             field    : "qty_damage",
             width    : 150,
+            resizable: false,
             visible  : false,
             editor   : "input",
             formatter: "money",
@@ -72,7 +77,8 @@ let detail = {
         },
         {
             formatter : dataTable.arrowLeftIcon,
-            width     : 50,
+            width     : 40,
+            resizable : false,
             field     : "put_all",
             align     : "center",
             headerSort: false,
@@ -83,6 +89,7 @@ let detail = {
             title    : "Available Qty.",
             field    : "available_quantity",
             width    : 150,
+            resizable: false,
             formatter: "money",
             align    : "right",
         },
@@ -90,6 +97,7 @@ let detail = {
             title    : "Amount",
             field    : "amount",
             width    : 100,
+            resizable: false,
             formatter: "money",
             align    : "right",
         },
@@ -102,6 +110,7 @@ let detail = {
         {
             formatter : dataTable.deleteIcon,
             width     : 40,
+            resizable : false,
             align     : "center",
             headerSort: false,
             cellClick : function(e, cell){ detail.delete(e, cell); }
@@ -115,6 +124,7 @@ let detail = {
             align         : "center",
             headerSort    : false,
             width         : 20,
+            resizable     : false,
             cellClick     : function(e, cell) {
                 cell.getRow().toggleSelect();
             }
