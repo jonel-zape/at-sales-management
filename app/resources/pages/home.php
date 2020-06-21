@@ -63,7 +63,16 @@
                 <div class="widget widget-cost">
                     <div class="widget-counter" id="summary-cost">0.00</div>
                     <div class="widget-label">
-                        Cost
+                        <table>
+                            <tr>
+                                <td align="left">Cost</td>
+                                <td align="right">
+                                    <a href="/purchase/create">
+                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -71,7 +80,16 @@
                 <div class="widget widget-sales">
                     <div class="widget-counter" id="summary-sales">0.00</div>
                     <div class="widget-label">
-                        Sales
+                        <table>
+                            <tr>
+                                <td align="left">Sales</td>
+                                <td align="right">
+                                    <a href="/sales/create">
+                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -79,9 +97,16 @@
                 <div class="widget widget-loss">
                     <div class="widget-counter" id="summary-loss">0.00</div>
                     <div class="widget-label">
-                        <!-- <i class="fa fa-circle summary-loss" aria-hidden="true"></i>
-                        &nbsp; -->
-                        Loss
+                        <table>
+                            <tr>
+                                <td align="left">Loss</td>
+                                <td align="right">
+                                    <a href="/sales/create">
+                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -89,9 +114,16 @@
                 <div class="widget widget-net-income">
                     <div class="widget-counter" id="summary-net-income">0.00</div>
                     <div class="widget-label">
-                        <!-- <i class="fa fa-circle summary-net-income" aria-hidden="true"></i>
-                        &nbsp; -->
-                        Net Income
+                        <table>
+                            <tr>
+                                <td align="left">Net Income</td>
+                                <td align="right">
+                                    <a href="/sales/create">
+                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -99,11 +131,31 @@
         <br>
         <div class="row">
             <div class="col-md-6 margin-bottom-15">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Past Months Comparison</div>
+                <div class="panel panel-info">
+                    <div class="panel-heading">Past months comparison</div>
                     <div id="chart-holder">
                         <canvas id="templatemo-line-chart"></canvas>
                     </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 margin-bottom-15">
+                <div class="panel panel-warning">
+                    <div class="panel-heading" id="notification-header">Notification for June 2020</div>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <span class="badge" id="amount_to_pay">0.00</span>
+                            Amount to pay
+                        </li>
+                        <li class="list-group-item">
+                            <span class="badge" id="unreceived_items">0.00</span>
+                            Unreceived items
+                        </li>
+                        <li class="list-group-item">
+                            <span class="badge" id="unsold-items">0.00</span>
+                            Received but unsold items
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

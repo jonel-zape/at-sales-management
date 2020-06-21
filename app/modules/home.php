@@ -57,6 +57,21 @@ class Home
             $response['graph'][] = $data;
         }
 
+        $notification = $this->getNotificationData($request['month'], $request['year']);
+        if (isset($notification[0])) {
+            $response['notification'] = [
+                'amount_to_pay' => $notification[0]['amount_to_pay'],
+                'unreceived_items' => $notification[0]['unreceived_items'],
+                'unsold_items' => $notification[0]['unsold_items'],
+            ];
+        } else {
+            $response['notification'] = [
+                'amount_to_pay' => 0,
+                'unreceived_items' => 0,
+                'unsold_items' => 0
+            ];
+        }
+
         return successfulResponse($response);
     }
 
@@ -94,6 +109,62 @@ class Home
                 GROUP BY CONCAT(MONTH(S.transaction_date), \'-\', YEAR(S.transaction_date))
             ) AS A
             GROUP BY A.`month_year`'
+        );
+    }
+
+    private function getNotificationData($month, $year)
+    {
+        return getData(
+            'SELECT
+                '.roundNumberSql('SUM(amount_to_pay)', 'amount_to_pay').',
+                '.roundNumberSql('SUM(unreceived_items)', 'unreceived_items').',
+                '.roundNumberSql('SUM(unsold_items)', 'unsold_items').'
+            FROM (
+                SELECT
+                    COALESCE(SUM(amount_to_pay), 0) AS amount_to_pay, 0 AS unreceived_items, 0 AS unsold_items
+                FROM (
+                    SELECT
+                        SUM(PD.qty * PD.cost_price) - P.paid_amount AS amount_to_pay
+                    FROM purchase AS P
+                    LEFT JOIN purchase_detail AS PD ON PD.transaction_id = P.id
+                    WHERE
+                        P.deleted_at IS NULL
+                        AND P.paid_at IS NULL
+                        AND P.received_at IS NOT NULL
+                        AND (P.transaction_date BETWEEN \''.$year.'-'.$month.'-01 00:00:00\' AND \''.$year.'-'.$month.'-31 23:59:59\')
+                    GROUP BY P.id
+                ) AS A
+                UNION ALL
+                SELECT
+                    0 AS amount_to_pay, COALESCE(SUM(unreceived_items), 0) AS unreceived_items, 0 AS unsold_items
+                FROM (
+                    SELECT
+                        SUM(PD.qty) AS unreceived_items
+                    FROM purchase AS P
+                    LEFT JOIN purchase_detail AS PD ON PD.transaction_id = P.id
+                    WHERE
+                        P.deleted_at IS NULL
+                        AND P.received_at IS NULL
+                        AND (P.transaction_date BETWEEN \''.$year.'-'.$month.'-01 00:00:00\' AND \''.$year.'-'.$month.'-31 23:59:59\')
+                    GROUP BY P.id
+                ) AS B
+                UNION ALL
+                SELECT
+                    0 AS amount_to_pay, 0 AS unreceived_items, COALESCE(SUM(qty)) AS unsold_items
+                FROM (
+                    SELECT
+                        PD.qty - COALESCE(SUM(IF(S.deleted_at IS NULL, IF(S.returned_at IS NULL, SD.qty, SD.qty - SD.qty_damage), 0)), 0) AS qty
+                    FROM purchase AS P
+                    LEFT JOIN purchase_detail AS PD ON PD.transaction_id = P.id
+                    LEFT JOIN sales_detail AS SD ON SD.purchase_detail_id = PD.id
+                    LEFT JOIN sales AS S ON S.id = SD.transaction_id
+                    WHERE
+                        P.deleted_at IS NULL
+                        AND P.received_at IS NOT NULL
+                        AND (P.transaction_date BETWEEN \''.$year.'-'.$month.'-01 00:00:00\' AND \''.$year.'-'.$month.'-31 23:59:59\')
+                    GROUP BY PD.id
+                ) AS C
+            ) AS Z'
         );
     }
 }

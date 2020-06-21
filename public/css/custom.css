@@ -122,23 +122,23 @@
 }
 
 .widget-net-income {
-    background-color: rgb(5,201,48);
-    border: solid 1px rgb(10, 133, 37);
+    background-color: rgb(84, 209, 111);
+    border: solid 1px rgb(57, 192, 86);
 }
 
 .widget-loss {
-    background: rgb(219,64,64);
-    border: solid 1px rgb(151, 28, 28);
+    background: rgb(235, 94, 94);
+    border: solid 1px rgb(214, 91, 91);
 }
 
 .widget-cost {
-    background: rgb(224,155,6);
-    border: solid 1px rgb(185, 128, 3);
+    background: rgb(219, 168, 59);
+    border: solid 1px rgb(209, 152, 29);
 }
 
 .widget-sales {
-    background: rgb(65,112,204);
-    border: solid 1px rgb(21, 67, 158);
+    background: rgb(94, 139, 230);
+    border: solid 1px rgb(71, 118, 211);
 }
 
 .modal-backdrop {
@@ -163,7 +163,7 @@
 }
 .widget .widget-counter{
     padding: 15px;
-    padding-bottom: 7px;
+    padding-bottom: 15px;
     font-size: 18pt;
     font-weight: bold;
     text-align: right;
@@ -173,4 +173,21 @@
     padding: 15px;
     padding-top: 7px;
     font-size: 10pt;
+}
+
+.widget-label{
+    border-top: solid 1px rgba(255, 255, 255, 0.274)
+}
+
+.widget table{
+    width: 100%;
+}
+
+.widget a {
+    font-size: 120%;
+    color: #ffffff;
+}
+
+.widget a:hover {
+    color: #e2e2e2;
 }
