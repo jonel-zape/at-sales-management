@@ -120,6 +120,10 @@
 
                 let originalValue = $(this).find('input').val();
 
+                $.ajaxSetup({
+                    headers: { 'X-USER-TOKEN': window.token }
+                });
+
                 $(this).find('input').autocomplete({
                     serviceUrl: options.route + '?field=' + field,
                     dataType: 'json',

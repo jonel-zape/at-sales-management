@@ -1,7 +1,5 @@
 <?php
 
-// TODO:
-// Secure using token
 function isAuthenticated()
 {
     if (isset($_SESSION['user_id'])) {
@@ -14,8 +12,16 @@ function isAuthenticated()
 function isAuthenticatedJson()
 {
     $headers = getallheaders();
-    if (isset($headers['X-USER-TOKEN']) && $_SESSION['token']) {
-        return $headers['X-USER-TOKEN'] == $_SESSION['token'];
+
+    $token = null;
+    if (isset($headers['X-USER-TOKEN'])) {
+        $token = $headers['X-USER-TOKEN'];
+    } elseif (isset($headers['x-user-token'])) {
+        $token = $headers['x-user-token'];
+    }
+
+    if ($token != null && $_SESSION['token']) {
+        return $token == $_SESSION['token'];
     }
 
     return false;
