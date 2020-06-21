@@ -64,6 +64,15 @@ let list = {
                 width    : 190
             },
             {
+                formatter: function(cell, formatterParams){
+                    return "<i class='fa fa-external-link' aria-hidden='true' title='View Purchase'></i>";
+                },
+                width    : 40,
+                align    : "center",
+                headerSort: false,
+                cellClick: function(e, cell){ list.gotPurchase(e, cell); }
+            },
+            {
                 title    : dataTable.headerWithPencilIcon("Paid Amount"),
                 field    : "paid_amount",
                 formatter: "money",
@@ -140,6 +149,12 @@ let list = {
             alert.error(response.errors);
             loading.hide();
         });
+    },
+
+    gotPurchase(e, cell) {
+        loading.show();
+        let id = cell.getRow().getData().id;
+        window.location = `/purchase/edit/${id}`;
     }
 };
 

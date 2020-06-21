@@ -204,6 +204,7 @@ class Sales extends Invoice
                 P.`short_name`,
                 P.`stock_no`,
                 PH.`invoice_number` AS `purchase_invoice_number`,
+                PH.`id` AS purchase_id,
                 SD.`transaction_id`,
                 SD.`purchase_detail_id`,
                 '.roundNumberSql('SD.`qty_damage`', 'qty_damage').',

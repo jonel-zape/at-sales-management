@@ -344,7 +344,7 @@ class Purchase extends Invoice
             FROM purchase_detail AS PD
             LEFT JOIN sales_detail AS SD ON SD.purchase_detail_id = PD.id
             LEFT JOIN sales AS S ON S.id = SD.transaction_id
-            WHERE PD.id = '.$request['purchase_detail_id'].'
+            WHERE PD.id = '.$request['purchase_detail_id'].' AND S.id IS NOT NULL
             ORDER BY S.transaction_date DESC'
         );
 

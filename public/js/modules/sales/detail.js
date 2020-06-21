@@ -14,6 +14,15 @@ let detail = {
             width    : 170,
         },
         {
+            formatter: function(cell, formatterParams){
+                return "<i class='fa fa-external-link' aria-hidden='true' title='View Purchase'></i>";
+            },
+            width    : 40,
+            align    : "center",
+            headerSort: false,
+            cellClick: function(e, cell){ detail.gotPurchase(e, cell); }
+        },
+        {
             title    : "Stock No",
             field    : "stock_no",
             formatter: "plaintext",
@@ -420,6 +429,12 @@ let detail = {
         this.getSummary();
 
         $("#buttonCloseModal").click();
+    },
+
+    gotPurchase(e, cell) {
+        loading.show();
+        let id = cell.getRow().getData().purchase_id;
+        window.location = `/purchase/edit/${id}`;
     }
 };
 
